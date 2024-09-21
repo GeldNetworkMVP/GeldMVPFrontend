@@ -1,0 +1,42 @@
+<ng-template #content>
+  <ng-content />
+</ng-template>
+
+<div>
+  @if(!isDashboardOverviewPage()) {
+  <p-breadcrumb class="max-w-full" [model]="breadcrumbItems()">
+    <ng-template pTemplate="item" let-item>
+      <ng-container *ngIf="item.route; else elseBlock">
+        <a [routerLink]="item.route" class="flex items-center gap-2">
+          @if(item.icon) {
+          <iconify-icon [icon]="item.icon" />
+          }
+          <span class="text-primary font-semibold">{{ item.label }}</span>
+        </a>
+      </ng-container>
+      <ng-template #elseBlock>
+        <a [href]="item.url">
+          <span>{{ item.label }}</span>
+        </a>
+      </ng-template>
+    </ng-template>
+  </p-breadcrumb>
+  } @else {
+  <div class="h-[56px]"></div>
+  }
+  <div class="flex items-center justify-between">
+    <h1 class="ml-4 text-[36px]">{{ title() }}</h1>
+    @if (hasActionForAddButton()) {
+    <button pButton (click)="actionForAddButton()()" severity="secondary">
+      <span>Add</span>
+      <iconify-icon
+        icon="lucide:plus"
+        class="ml-2 text-[1.5rem]"
+      ></iconify-icon>
+    </button>
+    }
+  </div>
+  <section id="content" class="ml-4">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </section>
+</div>

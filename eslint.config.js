@@ -2,6 +2,7 @@
 const eslint = require("@eslint/js");
 const angular = require("angular-eslint");
 const perfectionist = require("eslint-plugin-perfectionist");
+const tailwind = require("eslint-plugin-tailwindcss");
 const tseslint = require("typescript-eslint");
 
 module.exports = tseslint.config(
@@ -91,5 +92,11 @@ module.exports = tseslint.config(
         },
       ],
     },
+  },
+  ...tailwind.configs['flat/recommended'],
+  {
+    rules: {
+      'tailwindcss/no-custom-classname': 'off',
+    }
   }
 );

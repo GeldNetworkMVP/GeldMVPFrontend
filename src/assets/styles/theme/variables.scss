@@ -1,12 +1,14 @@
 :root {
-    --dark-green: #254336;
-    --yellow: #FAC653;
-    --light-green: #B4DFC4;
-    --light-gray: #EDEDED;
-    --gray: #7E7E7E;
+    --brand-dark-green: rgb(37, 67, 54);
+    --brand-dark-green-transparent: #DFECE3;
+    --brand-yellow: #FAC653;
+    --brand-light-green: #B4DFC4;
+    --brand-light-gray: #EDEDED;
+    --brand-gray: #7E7E7E;
 
 
     // style overrides for primeng
-    --secondary-color: var(var(--yellow)) !important;
-    --secondary-color-text: #000 !important;
+    --brand-secondary-color: var(var(--brand-yellow)) !important;
+    --brand-secondary-color-text: #000 !important;  
+    --font-family: "Inter", sans-serif !important;
 }
