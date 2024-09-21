@@ -1,0 +1,12 @@
+:root {
+    --dark-green: #254336;
+    --yellow: #FAC653;
+    --light-green: #B4DFC4;
+    --light-gray: #EDEDED;
+    --gray: #7E7E7E;
+
+
+    // style overrides for primeng
+    --secondary-color: var(var(--yellow)) !important;
+    --secondary-color-text: #000 !important;
+}
