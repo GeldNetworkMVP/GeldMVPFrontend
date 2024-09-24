@@ -1,0 +1,10 @@
+<div class="h-[128px] rounded-xl border border-[rgba(0,0,0,0.2)] px-4 py-2">
+  <div class="flex items-center justify-end">
+    <button>
+        <iconify-icon icon="lucide:trash" class="text-brand-gray"  />
+  </button></div>
+  <div>
+    <h3 class="text-[20px] font-[700]">{{ props().name }}</h3>
+    <p-tag [value]="props().numOfRecords + ' records'" severity="secondary"></p-tag>
+  </div>
+</div>

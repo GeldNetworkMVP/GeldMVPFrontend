@@ -1,0 +1,23 @@
+<div class="rounded-xl border border-[rgba(0,0,0,0.2)] p-4">
+  <div class="flex items-start justify-between">
+    <iconify-icon icon="lucide:workflow" class="text-[1.75rem]" />
+    <button>
+      <iconify-icon icon="lucide:trash" class="text-brand-gray" />
+    </button>
+  </div>
+  <div class="mt-2 flex flex-col gap-2">
+    <h3 class="text-[20px] font-[700]">
+      {{ props().workflowName }}
+    </h3>
+    <p>
+      {{ props().workflowDescription }}
+    </p>
+    <p-tag
+      [value]="props().numOfStages + ' stages'"
+      severity="secondary"
+    ></p-tag>
+    <p-button styleClass="mt-4 w-full flex justify-center">
+      Edit
+    </p-button>
+  </div>
+</div>
