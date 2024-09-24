@@ -2,5 +2,9 @@
   title="Stages"
   [actionForAddButtonInput]="onAddStageClick"
 >
-  <h1>View stages</h1>
+  <div class="mt-6 grid grid-cols-3 gap-8">
+    @for (s of dummyStages;track s._id) {
+    <app-stage-card [props]="s"></app-stage-card>
+    }
+  </div>
 </app-dashboard-page-wrapper>
