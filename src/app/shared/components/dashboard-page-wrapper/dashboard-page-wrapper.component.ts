@@ -24,10 +24,18 @@ import { ICONS_FOR_DASHBOARD_PAGES_MAP } from '@shared/constants/icons-for-dashb
 })
 export class DashboardPageWrapperComponent implements OnInit {
   title = input.required<string>();
-  actionForAddButtonInput = input<() => void>();
-  actionForAddButton = signal<() => void>(() => {
-    void 0;
-  });
+
+  primaryButton = input<{
+    action: () => void;
+    label: string;
+  }>()
+
+  secondaryButton = input<{
+    action: () => void;
+    label: string;
+  }>()
+
+
   hasActionForAddButton = signal<boolean>(false);
   router = inject(Router);
   breadcrumbItems = signal<MenuItem[]>([]);
@@ -35,10 +43,6 @@ export class DashboardPageWrapperComponent implements OnInit {
 
   ngOnInit() {
     this.setupBreadcrumbItems();
-    if (this.actionForAddButtonInput()) {
-      this.actionForAddButton.set(this.actionForAddButtonInput() as () => void);
-      this.hasActionForAddButton.set(true);
-    }
   }
 
   setupBreadcrumbItems() {

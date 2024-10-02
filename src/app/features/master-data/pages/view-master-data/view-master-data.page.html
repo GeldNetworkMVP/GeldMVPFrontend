@@ -1,6 +1,9 @@
 <app-dashboard-page-wrapper
   title="Master Data Containers"
-  [actionForAddButtonInput]="onAddMasterDataButtonClick"
+  [primaryButton]="{
+    label: 'Add New',
+    action: showDialog()
+  }"
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
     @for (md of dummyMasterData;track md._id) {
@@ -8,3 +11,5 @@
     }
   </div>
 </app-dashboard-page-wrapper>
+
+<app-add-master-data-container-dialog [visible]="visible" />

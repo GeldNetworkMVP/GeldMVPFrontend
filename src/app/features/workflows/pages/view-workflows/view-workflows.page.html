@@ -1,6 +1,9 @@
 <app-dashboard-page-wrapper
   title="Workflows"
-  [actionForAddButtonInput]="onAddWorkflowClick"
+  [primaryButton]="{
+    label: 'Add New',
+    action: onAddWorkflowClick
+  }"
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
     @for (wf of dummyWorkflows;track wf._id) {

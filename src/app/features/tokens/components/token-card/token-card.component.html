@@ -1,0 +1,14 @@
+<div class="rounded-xl border border-[rgba(0,0,0,0.2)] p-4">
+  <img src="assets/images/token-card-bg.png" alt="Token card" class="w-full">
+  <div class="mt-2 flex flex-col gap-1">
+    <h3 class="text-[20px] font-[700]">
+      {{ props().tokenName }}
+    </h3>
+    <p>
+      {{ props().xlm }} XLM
+    </p>
+    <p-button styleClass="mt-4 w-full flex justify-center items-center gap-2" severity="secondary" >
+      View <iconify-icon  icon="lucide:external-link" class="text-xl" />
+    </p-button>
+  </div>
+</div>

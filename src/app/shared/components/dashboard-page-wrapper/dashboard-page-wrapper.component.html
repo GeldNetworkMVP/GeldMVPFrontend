@@ -26,15 +26,26 @@
   }
   <div class="flex items-center justify-between">
     <h1 class="ml-4 text-[36px]">{{ title() }}</h1>
-    @if (hasActionForAddButton()) {
-    <button pButton (click)="actionForAddButton()()" severity="secondary">
-      <span>Add</span>
-      <iconify-icon
-        icon="lucide:plus"
-        class="ml-2 text-[1.5rem]"
-      ></iconify-icon>
-    </button>
-    }
+    <div class="flex items-center gap-4">
+      @if (secondaryButton()) {
+        <button pButton (click)="secondaryButton()?.action()" severity="secondary" [outlined]="true" >
+          <span>{{ secondaryButton()?.label }}</span>
+          <iconify-icon
+            icon="lucide:external-link"
+            class="ml-2 text-[1.5rem]"
+          ></iconify-icon>
+        </button>
+        }
+      @if (primaryButton()) {
+        <button pButton (click)="primaryButton()?.action()" severity="secondary">
+          <span>{{ primaryButton()?.label }}</span>
+          <iconify-icon
+            icon="lucide:plus"
+            class="ml-2 text-[1.5rem]"
+          ></iconify-icon>
+        </button>
+        }
+    </div>
   </div>
   <section id="content" class="ml-4">
     <ng-container *ngTemplateOutlet="content"></ng-container>

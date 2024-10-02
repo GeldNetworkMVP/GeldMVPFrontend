@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import {
   StageCardComponent,
@@ -7,14 +7,21 @@ import {
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
 
+import { AddStageDialogComponent } from '../../components/add-stage-dialog/add-stage-dialog.component';
+
 @Component({
   selector: 'app-view-stages-page',
   templateUrl: './view-stages.page.html',
   styleUrls: ['./view-stages.page.scss'],
   standalone: true,
-  imports: [DashboardPageWrapperComponent, StageCardComponent],
+  imports: [
+    DashboardPageWrapperComponent,
+    StageCardComponent,
+    AddStageDialogComponent,
+  ],
 })
 export class ViewStagesPageComponent {
+  visible = signal(false);
   dummyStages: StageCardComponentProps[] = [
     {
       _id: 1,
@@ -41,5 +48,11 @@ export class ViewStagesPageComponent {
 
   onAddStageClick() {
     console.log('Add stage button clicked');
+  }
+
+  showDialog() {
+    return () => {
+      this.visible.set(true);
+    };
   }
 }

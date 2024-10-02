@@ -1,6 +1,9 @@
 <app-dashboard-page-wrapper
   title="Stages"
-  [actionForAddButtonInput]="onAddStageClick"
+  [primaryButton]="{
+    label: 'Add New',
+    action: showDialog()
+  }"
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
     @for (s of dummyStages;track s._id) {
@@ -8,3 +11,4 @@
     }
   </div>
 </app-dashboard-page-wrapper>
+<app-add-stage-dialog [visible]="visible" />
