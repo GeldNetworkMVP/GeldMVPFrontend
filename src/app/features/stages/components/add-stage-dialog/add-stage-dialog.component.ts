@@ -48,6 +48,17 @@ export class AddStageDialogComponent implements OnInit {
     },
   ];
 
+  masterDataItemOptions: MasterDataItem[] = [
+    {
+      name: 'Farmers',
+      _id: UUID(),
+    },
+    {
+      name: 'Processing Centers',
+      _id: UUID(),
+    },
+  ];
+
   visible = input.required<WritableSignal<boolean>>();
   addDialogVisibility = signal(false);
 
@@ -151,6 +162,11 @@ export class AddStageDialogComponent implements OnInit {
 interface TypeOption {
   name: string;
   key: string;
+}
+
+interface MasterDataItem {
+  name: string;
+  _id: string;
 }
 
 interface AddStageForm {
