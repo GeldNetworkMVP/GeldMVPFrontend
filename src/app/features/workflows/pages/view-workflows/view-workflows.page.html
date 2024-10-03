@@ -2,7 +2,7 @@
   title="Workflows"
   [primaryButton]="{
     label: 'Add New',
-    action: onAddWorkflowClick
+    action: showDialog()
   }"
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
@@ -11,3 +11,4 @@
     }
   </div>
 </app-dashboard-page-wrapper>
+<app-add-workflow-dialog [visible]="visible" />
