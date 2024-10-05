@@ -1,0 +1,104 @@
+<p-dialog
+  header="Add New Workflow"
+  [modal]="true"
+  [(visible)]="addDialogVisibility"
+  [style]="{ width: '40rem' }"
+  [breakpoints]="{ '1199px': '45vw', '575px': '90vw' }"
+  (onHide)="resetForm()"
+>
+  <form
+    [formGroup]="addWorkflowForm"
+    class="mt-2 flex grow flex-col items-start gap-4"
+  >
+    <div class="flex w-full flex-col gap-2">
+      <label for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        pInputText
+        formControlName="name"
+        placeholder="Enter container name"
+        variant="filled"
+      />
+      @if(addWorkflowForm.getError('name')?.invalid &&
+      addWorkflowForm.getError('name')?.touched) {
+      <small class="text-red-500"> Name is required </small>
+      }
+    </div>
+
+    <div class="flex w-full flex-col gap-2">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        pInputTextarea
+        formControlName="description"
+        placeholder="Enter workflow description"
+        variant="filled"
+      ></textarea>
+      @if(addWorkflowForm.getError('description')?.invalid &&
+      addWorkflowForm.getError('description')?.touched) {
+      <small class="text-red-500"> Description is required </small>
+      }
+    </div>
+
+    <div class="flex w-full flex-col gap-2">
+      <label for="stages">Select stages</label>
+      <p-multiSelect
+        [options]="stageOptions()"
+        appendTo="body"
+        optionLabel="name"
+        optionValue="name"
+        [filter]="true"
+        filterBy="name"
+        styleClass="w-full"
+        formControlName="stages"
+        placeholder="Select stages"
+        id="stages"
+        name="stages"
+      />
+    </div>
+    @if(addWorkflowForm.controls.stages.value &&
+    addWorkflowForm.controls.stages.value.length > 0) {
+    <p-orderList
+      [value]="addWorkflowForm.controls.stages.value"
+      [listStyle]="{ 'max-height': '30rem' }"
+      [dragdrop]="true"
+      styleClass="w-full"
+    >
+      <ng-template let-stage pTemplate="item">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex-column flex flex-1 gap-2">
+            <span>{{ stage }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </p-orderList>
+    }
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="flex items-center justify-end gap-4">
+      <p-button
+        type="button"
+        (onClick)="cancelAdding()"
+        severity="secondary"
+        [outlined]="true"
+      >
+        Cancel
+      </p-button>
+      <p-button
+        [disabled]="addWorkflowForm.invalid"
+        type="submit"
+        (onClick)="onSubmit()"
+        [loading]="saving()"
+        styleClass="flex items-center gap-2"
+      >
+        {{
+          addWorkflowForm.valid
+            ? "Add"
+            : "Please
+    fill all the fields"
+        }}
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

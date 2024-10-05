@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { provideStore } from '@ngxs/store';
+
+import { TokensState } from './stores/tokens-store/tokens.state';
 
 export const tokensRoutes: Routes = [
   {
@@ -12,5 +15,6 @@ export const tokensRoutes: Routes = [
           ),
       },
     ],
+    providers: [provideStore([TokensState])]
   },
 ];

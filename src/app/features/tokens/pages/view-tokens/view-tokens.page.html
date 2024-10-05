@@ -1,4 +1,17 @@
-<app-dashboard-page-wrapper title="Tokens" [actionForAddButtonInput]="onAddTokenClick">
-    <h1>View tokens</h1>
-  </app-dashboard-page-wrapper>
-  
+<app-dashboard-page-wrapper
+  title="Tokens"
+  [primaryButton]="{
+  label: 'Add New',
+  action: onAddTokenClick
+}"
+  [secondaryButton]="{
+  label: 'Geld Market',
+  action: onViewMarketClick
+}"
+>
+  <div class="mt-6 grid grid-cols-3 gap-8">
+    @for (t of tokens();track t._id) {
+    <app-token-card [props]="t"></app-token-card>
+    }
+  </div>
+</app-dashboard-page-wrapper>

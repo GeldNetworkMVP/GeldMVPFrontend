@@ -1,10 +1,14 @@
 <app-dashboard-page-wrapper
   title="Workflows"
-  [actionForAddButtonInput]="onAddWorkflowClick"
+  [primaryButton]="{
+    label: 'Add New',
+    action: showDialog()
+  }"
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
-    @for (wf of dummyWorkflows;track wf._id) {
+    @for (wf of workflows();track wf._id) {
     <app-workflow-card [props]="wf"></app-workflow-card>
     }
   </div>
 </app-dashboard-page-wrapper>
+<app-add-workflow-dialog [visible]="visible" (addWorkflow)="loadWorkflows()" />
