@@ -7,13 +7,13 @@
   </div>
   <div class="mt-2 flex flex-col gap-2">
     <h3 class="text-[20px] font-[700]">
-      {{ props().stageNumber }} - {{ props().stageName }}
+      {{ num() }} - {{ props().stagename }}
     </h3>
     <p class="h-[60px]">
-      {{ props().stageDescription }}
+      {{ props().description }}
     </p>
     <p-tag
-      [value]="props().numOfFields + ' fields'"
+      [value]="numOfFields() + ' fields'"
       severity="secondary"
     ></p-tag>
     <p-button styleClass="mt-4 w-full flex justify-center">

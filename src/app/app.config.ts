@@ -1,5 +1,6 @@
 import {
   provideHttpClient,
+  withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import {
@@ -12,7 +13,7 @@ import { provideRouter } from '@angular/router';
 import { AuthModule } from '@auth0/auth0-angular';
 import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { provideStore } from '@ngxs/store';
-import { PrimeNGConfig } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 
 import { appRoutes } from './app.routes';
 
@@ -41,7 +42,8 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideStore([], withNgxsReduxDevtoolsPlugin()),
+    MessageService
   ],
 };

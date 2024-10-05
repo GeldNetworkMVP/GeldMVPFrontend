@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 
 import { AddWorkflowDialogComponent } from '@features/workflows/components/add-workflow-dialog/add-workflow-dialog.component';
 import {
   WorkflowCardComponent,
-  WorkflowCardComponentProps,
 } from '@features/workflows/components/workflow-card/workflow-card.component';
+import { Workflow } from '@features/workflows/models/workflow.model';
+import { WorkflowsService } from '@features/workflows/services/workflows.service';
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
 
@@ -19,32 +20,28 @@ import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page
     AddWorkflowDialogComponent,
   ],
 })
-export class ViewWorkflowsPageComponent {
-  visible = signal(false);
+export class ViewWorkflowsPageComponent implements OnInit {
+  workflowsService = inject(WorkflowsService);
 
-  dummyWorkflows: WorkflowCardComponentProps[] = [
-    {
-      _id: 1,
-      workflowName: 'Weeding',
-      workflowDescription:
-        'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-      numOfStages: 5,
-    },
-    {
-      _id: 2,
-      workflowName: 'Germination',
-      workflowDescription:
-        'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-      numOfStages: 10,
-    },
-    {
-      _id: 3,
-      workflowName: 'Harvesting',
-      workflowDescription:
-        'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-      numOfStages: 15,
-    },
-  ];
+  workflows = signal<Workflow[]>([]);
+
+  visible = signal(false);
+  loading = signal(false);
+
+  ngOnInit(): void {
+    this.loadWorkflows();
+  }
+
+  loadWorkflows() {
+    this.loading.set(true);
+    this.workflowsService
+      .getAllWorkflowsWithoutPagination()
+      .subscribe((data) => {
+        this.workflows.set(data);
+        this.loading.set(false);
+      });
+  }
+
   onAddWorkflowClick() {
     console.log('Add stage button clicked');
   }

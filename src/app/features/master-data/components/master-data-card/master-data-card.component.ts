@@ -1,5 +1,8 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
+
+import { MasterDataContainer } from '@features/master-data/models/master-data-container.model';
 
 @Component({
   standalone: true,
@@ -10,11 +13,12 @@ import { TagModule } from 'primeng/tag';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MasterDataCardComponent {
-  props = input.required<MasterDataCardComponentProps>();
+  props = input.required<MasterDataContainer>();
+
+  router = inject(Router);
+
+  navigateToMasterDataContainer() {
+    this.router.navigate(['/dashboard/master-data', this.props()._id]);
+  }
 }
 
-export interface MasterDataCardComponentProps {
-  _id: number;
-  name: string;
-  numOfRecords: number;
-}

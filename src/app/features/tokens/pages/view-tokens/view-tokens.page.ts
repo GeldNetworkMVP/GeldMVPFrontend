@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 
 import { TokenCardComponent } from '@features/tokens/components/token-card/token-card.component';
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
+
+import { TokensService } from '../../services/tokens.service';
+import {
+  SetTokens,
+  SetTokensLoading,
+} from '../../stores/tokens-store/tokens-data.actions';
+import { TokensState } from '../../stores/tokens-store/tokens.state';
 
 @Component({
   selector: 'app-view-tokens-page',
@@ -11,26 +19,24 @@ import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page
   standalone: true,
   imports: [DashboardPageWrapperComponent, TokenCardComponent],
 })
-export class ViewTokensPageComponent {
+export class ViewTokensPageComponent implements OnInit {
+  store = inject(Store);
+  tokensService = inject(TokensService);
 
+  tokens = this.store.selectSignal(TokensState.getTokens);
+  loading = this.store.selectSignal(TokensState.getTokensLoading);
 
-  dummyTokens = [
-    {
-      _id: 1,
-      tokenName: 'Token 1',
-      xlm: 100,
-    },
-    {
-      _id: 2,
-      tokenName: 'Token 2',
-      xlm: 200,
-    },
-    {
-      _id: 3,
-      tokenName: 'Token 3',
-      xlm: 300,
-    },
-  ];
+  ngOnInit() {
+    this.loadTokens();
+  }
+
+  loadTokens() {
+    this.store.dispatch(new SetTokensLoading(true));
+    this.tokensService.getAllTokensByStatus('OnSale').subscribe((data) => {
+      this.store.dispatch(new SetTokens(data.Response.content));
+      this.store.dispatch(new SetTokensLoading(false));
+    });
+  }
 
   onAddTokenClick() {
     console.log('Add stage button clicked');

@@ -2,8 +2,10 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   effect,
+  inject,
   input,
   OnInit,
+  output,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -14,12 +16,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ToastModule } from 'primeng/toast';
 import { v4 as UUID } from 'uuid';
+
+import { MasterDataContainer } from '@features/master-data/models/master-data-container.model';
+import { MasterDataService } from '@features/master-data/services/master-data.service';
+import { SaveStageDto } from '@features/stages/dto/save-stage.dto';
+import { StagesService } from '@features/stages/services/stages.service';
 
 @Component({
   standalone: true,
@@ -31,12 +40,21 @@ import { v4 as UUID } from 'uuid';
     InputTextModule,
     InputTextareaModule,
     DropdownModule,
+    ToastModule,
     ReactiveFormsModule,
     ButtonModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AddStageDialogComponent implements OnInit {
+  stagesService = inject(StagesService);
+  messageService = inject(MessageService);
+  masterDataService = inject(MasterDataService);
+  saving = signal(false);
+
+
+  addStage = output();
+
   typeOptions: TypeOption[] = [
     {
       name: 'Text',
@@ -48,16 +66,7 @@ export class AddStageDialogComponent implements OnInit {
     },
   ];
 
-  masterDataItemOptions: MasterDataItem[] = [
-    {
-      name: 'Farmers',
-      _id: UUID(),
-    },
-    {
-      name: 'Processing Centers',
-      _id: UUID(),
-    },
-  ];
+  masterDataItemOptions = signal<MasterDataContainer[]>([]);
 
   visible = input.required<WritableSignal<boolean>>();
   addDialogVisibility = signal(false);
@@ -73,10 +82,11 @@ export class AddStageDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.addStageForm.controls.fields.push(this.createGroup());
-  }
-
-  onSubmit() {
-    console.log('Form submitted ', this.addStageForm.value);
+    this.masterDataService
+      .getAllMasterDataContainersWithoutPagination()
+      .subscribe((data) => {
+        this.masterDataItemOptions.set(data);
+      });
   }
 
   resetForm() {
@@ -135,6 +145,45 @@ export class AddStageDialogComponent implements OnInit {
     this.resetForm();
   }
 
+  onSubmit() {
+    this.saving.set(true);
+    console.log('Form submitted ', this.addStageForm.value);
+    const value = this.addStageForm.value;
+    const formData: SaveStageDto = {
+      stagename: value.name as string,
+      description: value.description as string,
+      fields: (value.fields ?? []).map((field) => ({
+        valuekey: field.valuekey as string,
+        valuetype: field.valuetype as string,
+      })),
+    };
+
+    console.log('Form data ', formData);
+
+    this.stagesService.saveStage(formData).subscribe({
+      complete: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Stage added successfully',
+        });
+        this.addDialogVisibility.set(false);
+        this.resetForm();
+        this.addStage.emit();
+        this.saving.set(false);
+      },
+      error: (error) => {
+        console.error(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to add stage',
+        });
+        this.saving.set(false);
+      },
+    });
+  }
+
   private createControl() {
     const control = new FormControl<string>('', [
       Validators.required,
@@ -162,11 +211,6 @@ export class AddStageDialogComponent implements OnInit {
 interface TypeOption {
   name: string;
   key: string;
-}
-
-interface MasterDataItem {
-  name: string;
-  _id: string;
 }
 
 interface AddStageForm {

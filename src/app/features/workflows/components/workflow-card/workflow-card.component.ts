@@ -1,6 +1,8 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+
+import { Workflow } from '@features/workflows/models/workflow.model';
 
 @Component({
   standalone: true,
@@ -11,12 +13,6 @@ import { TagModule } from 'primeng/tag';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class WorkflowCardComponent {
-  props = input.required<WorkflowCardComponentProps>();
-}
-
-export interface WorkflowCardComponentProps {
-  _id: number;
-  workflowName: string;
-  workflowDescription: string;
-  numOfStages: number;
+  props = input.required<Workflow>();
+  numOfStages = computed(() => this.props().stages.length);
 }

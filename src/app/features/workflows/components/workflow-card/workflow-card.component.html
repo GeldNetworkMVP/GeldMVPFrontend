@@ -7,17 +7,12 @@
   </div>
   <div class="mt-2 flex flex-col gap-2">
     <h3 class="text-[20px] font-[700]">
-      {{ props().workflowName }}
+      {{ props().workflowname }}
     </h3>
     <p>
-      {{ props().workflowDescription }}
+      {{ props().description }}
     </p>
-    <p-tag
-      [value]="props().numOfStages + ' stages'"
-      severity="secondary"
-    ></p-tag>
-    <p-button styleClass="mt-4 w-full flex justify-center">
-      Edit
-    </p-button>
+    <p-tag [value]="numOfStages() + ' stages'" severity="secondary"></p-tag>
+    <p-button styleClass="mt-4 w-full flex justify-center"> Edit </p-button>
   </div>
 </div>

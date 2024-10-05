@@ -6,7 +6,10 @@
   [breakpoints]="{ '1199px': '50vw', '575px': '95vw' }"
   (onHide)="resetForm()"
 >
-  <form [formGroup]="addStageForm" class="mt-2 flex grow flex-col items-start gap-4 pb-8">
+  <form
+    [formGroup]="addStageForm"
+    class="mt-2 flex grow flex-col items-start gap-4 pb-8"
+  >
     <div class="flex w-full flex-col gap-2">
       <label for="name">Name</label>
       <input
@@ -69,12 +72,12 @@
       </div>
       @if(group.controls.valuetyperaw.getRawValue() === 'masterData') {
       <p-dropdown
-        [options]="masterDataItemOptions"
+        [options]="masterDataItemOptions()"
         appendTo="body"
-        optionLabel="name"
+        optionLabel="dataname"
         optionValue="_id"
         [filter]="true"
-        filterBy="name"
+        filterBy="dataname"
         styleClass="w-full"
         formControlName="valuetype"
         placeholder="Select master data container for this field"
@@ -104,6 +107,8 @@
         [disabled]="addStageForm.invalid"
         type="submit"
         (onClick)="onSubmit()"
+        [loading]="saving()"
+        styleClass="flex items-center gap-2"
       >
         {{
           addStageForm.valid
@@ -115,3 +120,5 @@
     </div>
   </ng-template>
 </p-dialog>
+
+<p-toast />

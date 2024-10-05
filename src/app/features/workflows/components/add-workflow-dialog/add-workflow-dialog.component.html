@@ -2,8 +2,8 @@
   header="Add New Workflow"
   [modal]="true"
   [(visible)]="addDialogVisibility"
-  [style]="{ width: '20rem' }"
-  [breakpoints]="{ '1199px': '35vw', '575px': '90vw' }"
+  [style]="{ width: '40rem' }"
+  [breakpoints]="{ '1199px': '45vw', '575px': '90vw' }"
   (onHide)="resetForm()"
 >
   <form
@@ -44,7 +44,7 @@
     <div class="flex w-full flex-col gap-2">
       <label for="stages">Select stages</label>
       <p-multiSelect
-        [options]="stageOptions"
+        [options]="stageOptions()"
         appendTo="body"
         optionLabel="name"
         optionValue="name"
@@ -52,7 +52,7 @@
         filterBy="name"
         styleClass="w-full"
         formControlName="stages"
-        placeholder="Select master data container"
+        placeholder="Select stages"
         id="stages"
         name="stages"
       />
@@ -89,6 +89,8 @@
         [disabled]="addWorkflowForm.invalid"
         type="submit"
         (onClick)="onSubmit()"
+        [loading]="saving()"
+        styleClass="flex items-center gap-2"
       >
         {{
           addWorkflowForm.valid

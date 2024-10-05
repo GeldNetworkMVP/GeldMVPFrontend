@@ -1,6 +1,13 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  CUSTOM_ELEMENTS_SCHEMA,
+  input,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+
+import { Stage } from '@features/stages/models/stage.model';
 
 @Component({
   standalone: true,
@@ -11,13 +18,8 @@ import { TagModule } from 'primeng/tag';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class StageCardComponent {
-  props = input.required<StageCardComponentProps>();
-}
-
-export interface StageCardComponentProps {
-  _id: number;
-  stageNumber: number;
-  stageName: string;
-  stageDescription: string;
-  numOfFields: number;
+  props = input.required<Stage>();
+  index = input.required<number>();
+  num = computed(() => this.index() + 1);
+  numOfFields = computed(() => this.props().fields.length);
 }
