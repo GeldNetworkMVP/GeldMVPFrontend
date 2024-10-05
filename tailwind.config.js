@@ -9,6 +9,7 @@ module.exports = {
         'brand-light-green': "var(--brand-light-green)",
         'brand-light-gray': "var(--brand-light-gray)",
         'brand-gray': "var(--brand-gray)",
+        'brand-bright-green': "var(--brand-bright-green)",
       },
     },
   },

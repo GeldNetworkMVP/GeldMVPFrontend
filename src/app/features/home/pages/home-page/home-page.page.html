@@ -1,0 +1,70 @@
+<div class="h-screen w-screen overflow-hidden">
+  <main class="flex h-[calc(100vh-92px)]">
+    <section
+      class="relative h-[calc(100vh-92px)] w-[45%]"
+      [style]="{
+            backgroundImage: 'url(assets/images/home-bg.jpeg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+        }"
+    >
+      <p class="absolute left-6 top-3 text-[30px]">
+        <span class="font-[700]">Geld</span>
+        <span>.Network</span>
+      </p>
+    </section>
+    <section class="h-[calc(100vh-92px)] w-[55%] px-6 py-8">
+      <div class="flex items-start justify-between">
+        <img
+          src="assets/images/geld-logo-2.svg"
+          alt="Geld Logo"
+          class="h-[72px] w-[100px]"
+        />
+        <a class="flex items-center gap-2 underline">
+          Visit Geld Market
+          <iconify-icon icon="lucide:external-link" />
+        </a>
+      </div>
+      <h1 class="mt-2 w-4/5 text-[40px] font-[700] xl:text-[44px]" style="line-height: 56px">
+        Bringing
+        <span class="text-brand-bright-green"> people, planet </span> and
+        <span class="text-brand-bright-green"> profit </span>
+        together.
+      </h1>
+      <p class="mt-4 w-[94%] text-justify text-[16px]">
+        Welcome to Geld.Network, we are earthkeepers, academics, developers,
+        radical thinkers, economists, and people like you who care for our
+        common home. It's great we are planning to become a multi-planetary
+        species, but we have to save the earth first.
+      </p>
+      <p class="mt-4 w-[94%] text-justify text-[16px]">
+        At Geld environmental conservation meets cutting-edge blockchain
+        technology. We are tokenizing real-world assets starting with land and
+        carbon credits.
+      </p>
+      <p class="mt-4 w-[94%] text-justify text-[16px]">
+        Geld.Network is a trailblazing carbon credit collective using
+        Agroforestry and other nature-based solutions to regenerate overfarmed
+        lands and protect their biodiversity. Our platform is designed to
+        streamline the connection between landowners and carbon credit
+        certifiers.
+      </p>
+      <p-button styleClass="flex items-center gap-2 mt-8" routerLink="/dashboard">
+        Geld Portal <iconify-icon icon="lucide:arrow-right" />
+      </p-button>
+      <a class="mt-24 flex items-center gap-2 text-[#699E83]">
+        <iconify-icon icon="lucide:help-circle"/>
+        Have questions? Reach out to us.</a>
+    </section>
+  </main>
+  <footer class="flex h-[92px] items-center justify-between bg-black px-8 text-white">
+    <p>Copyright © 2024, Geld.Network. All Rights Reserved.</p>
+    <nav>
+        <ul class="flex items-center gap-8">
+            <li><a>Accessibility</a></li>
+            <li> <a>Privacy Policy</a> </li>
+            <li> <a>Do Not Sell My Personal Information</a></li>
+        </ul>
+    </nav>
+  </footer>
+</div>
