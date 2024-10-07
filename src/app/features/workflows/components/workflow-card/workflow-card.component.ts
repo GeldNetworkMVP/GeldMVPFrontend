@@ -1,4 +1,4 @@
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, input, output, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 
@@ -15,4 +15,15 @@ import { Workflow } from '@features/workflows/models/workflow.model';
 export class WorkflowCardComponent {
   props = input.required<Workflow>();
   numOfStages = computed(() => this.props().stages.length);
+
+
+  workflowSelectedToUpdate = output<Workflow>()
+
+  updateModalVisible = signal(false);
+
+  openEditDialog() {
+    this.updateModalVisible.set(true);
+    this.workflowSelectedToUpdate.emit(this.props())
+  }
+
 }

@@ -13,6 +13,6 @@
       {{ props().description }}
     </p>
     <p-tag [value]="numOfStages() + ' stages'" severity="secondary"></p-tag>
-    <p-button styleClass="mt-4 w-full flex justify-center"> Edit </p-button>
+    <p-button styleClass="mt-4 w-full flex justify-center" (onClick)="openEditDialog()"> Edit </p-button>
   </div>
 </div>
