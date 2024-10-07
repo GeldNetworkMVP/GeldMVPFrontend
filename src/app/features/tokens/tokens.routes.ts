@@ -14,7 +14,14 @@ export const tokensRoutes: Routes = [
             (m) => m.ViewTokensPageComponent
           ),
       },
+      {
+        path: 'new',
+        loadComponent: () =>
+          import('./pages/create-token/create-token.page').then(
+            (m) => m.CreateTokenPageComponent
+          ),
+      },
     ],
-    providers: [provideStore([TokensState])]
+    providers: [provideStore([TokensState])],
   },
 ];

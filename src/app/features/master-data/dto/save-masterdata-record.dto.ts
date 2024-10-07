@@ -1,0 +1,1 @@
+export type SaveMasterdataRecordDto = Record<string, string> & {dataid: string}

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import {
@@ -9,6 +9,8 @@ import { StagesService } from '@features/stages/services/stages.service';
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
 
 import { AddStageDialogComponent } from '../../components/add-stage-dialog/add-stage-dialog.component';
+import { UpdateStageDialogComponent } from '../../components/update-stage-dialog/update-stage-dialog.component';
+import { Stage } from '../../models/stage.model';
 import { SetStages, SetStagesLoading } from '../../stores/stages-store/stages-data.actions';
 import { StagesState } from '../../stores/stages-store/stages.state';
 
@@ -21,6 +23,7 @@ import { StagesState } from '../../stores/stages-store/stages.state';
     DashboardPageWrapperComponent,
     StageCardComponent,
     AddStageDialogComponent,
+    UpdateStageDialogComponent,
   ],
 })
 export class ViewStagesPageComponent implements OnInit {
@@ -28,6 +31,9 @@ export class ViewStagesPageComponent implements OnInit {
   stagesService = inject(StagesService);
 
   visible = signal(false);
+  updateModalVisible = signal(false);
+
+  selectedStageToUpdate = signal<Stage | null>(null);
 
   stages = this.store.selectSignal(StagesState.getStages);
   loading = this.store.selectSignal(StagesState.getStagesLoading);
@@ -44,13 +50,26 @@ export class ViewStagesPageComponent implements OnInit {
     });
   }
 
-  onAddStageClick() {
-    console.log('Add stage button clicked');
-  }
+  
 
-  showDialog() {
+  showAddDialog() {
     return () => {
       this.visible.set(true);
     };
+  }
+
+  showUpdateDialog(stage: Stage) {
+    return () => {
+      this.selectedStageToUpdate.set(stage);
+      this.updateModalVisible.set(true);
+    };
+  }
+
+  constructor() {
+    effect(() => {
+      if(!this.updateModalVisible()) {
+        this.selectedStageToUpdate.set(null);
+      }
+    }, {allowSignalWrites: true})
   }
 }

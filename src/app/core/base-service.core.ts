@@ -31,7 +31,7 @@ export class BaseService {
   put<Dto = unknown>(
     urlPart: HttpPutParams[0],
     data: HttpPutParams[1],
-    options: HttpPutParams[2]
+    options?: HttpPutParams[2]
   ) {
     return this.http.put<Dto>(
       `${environment.apiUrl}/${urlPart}`,

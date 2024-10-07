@@ -16,10 +16,22 @@ export const masterDataRoutes: Routes = [
       },
       {
         path: ':id',
-        loadComponent: () =>
-          import(
-            './pages/view-data-in-master-data-containers/view-data-in-master-data-containers.page'
-          ).then((m) => m.ViewDataInMasterDataContainersPageComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import(
+                './pages/view-data-in-master-data-containers/view-data-in-master-data-containers.page'
+              ).then((m) => m.ViewDataInMasterDataContainersPageComponent),
+          },
+          {
+            path: 'new',
+            loadComponent: () =>
+              import(
+                './pages/create-master-data-record/create-master-data-record.page'
+              ).then((m) => m.CreateMasterRecordPageComponent),
+          },
+        ],
       },
     ],
     providers: [provideStore([MasterDataState])],

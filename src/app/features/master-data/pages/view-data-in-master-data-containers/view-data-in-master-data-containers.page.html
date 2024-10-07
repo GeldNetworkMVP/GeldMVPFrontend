@@ -2,7 +2,29 @@
   [title]="masterDataContainerName()"
   [primaryButton]="{
     label: 'Add New',
-    action: showDialog()
+    action: goToCreateRecordPage()
   }"
 >
+  @if(!loading()) {
+  <p-table
+    [columns]="columns()"
+    [value]="masterRecords()"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        @for (col of columns();track col.field) {
+        <th [id]="col.field">{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        @for (col of columns();track col.field) {
+        <td>{{ rowData[col.field] }}</td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+  }
 </app-dashboard-page-wrapper>
