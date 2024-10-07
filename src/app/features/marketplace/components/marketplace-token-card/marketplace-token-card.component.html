@@ -1,0 +1,19 @@
+<div class="rounded-xl border border-[rgba(0,0,0,0.2)] p-4">
+  <img src="assets/images/token-card-bg.png" alt="Token card" class="w-full">
+  <div class="mt-2 flex flex-col gap-1">
+    <h3 class="text-[20px] font-[700]">
+      {{ props().tokenname }}
+    </h3>
+    <p>
+      {{ props().price }} XLM
+    </p>
+    <div class="mt-4 flex items-center justify-stretch gap-4">
+      <p-button styleClass="flex w-full justify-center items-center gap-2" severity="secondary" >
+        View <iconify-icon  icon="lucide:external-link" class="text-xl" />
+      </p-button>
+      <p-button styleClass="w-full">
+        Reserve
+      </p-button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="min-h-screen w-screen overflow-x-hidden">
+  <header
+    class="flex w-full flex-col gap-4 py-4 text-white"
+    [style]="{
+      background: 'url(assets/images/marketplace-bg.jpeg) lightgray 50% / cover no-repeat',
+    }"
+  >
+    <div
+      class="mx-auto flex w-full items-center justify-between gap-4 px-3 sm:max-w-[576px] md:max-w-[720px] lg:max-w-[976px] xl:max-w-[1140px] 2xl:max-w-[1320px]"
+    >
+      <div class="flex items-center gap-2">
+        <img
+          src="assets/images/geld-logo-1.png"
+          alt="Geld Logo"
+          class="h-[60px] w-[90px]"
+        />
+        <p class="text-[40px]"><span class="font-[700]">Geld.</span> Network</p>
+      </div>
+      <nav class="flex items-center gap-4" aria-label="Marketplace Navigation">
+        <a
+          routerLink="/dashboard"
+          class="flex h-[48px] items-center rounded-[9px] bg-[rgba(0,0,0,0.40)] px-[18px] text-white"
+        >
+          Geld Portal
+        </a>
+        <a
+          routerLink="/dashboard"
+          class="flex h-[48px] items-center rounded-[9px] bg-[rgba(0,0,0,0.40)] px-[18px] text-white"
+        >
+          Connect Wallet
+        </a>
+      </nav>
+    </div>
+    <div class="mb-12">
+      <h1 class="mt-8 text-center text-[60px] font-[700]">
+        Welcome to Geld Market
+      </h1>
+      <p class="mx-auto w-2/3 text-center text-[18px]">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis
+        malesuada nunc. Aenean iaculis at lorem ut pulvinar. Morbi et malesuada
+        tellus. Aenean mollis ullamcorper orci eget fringilla.
+      </p>
+    </div>
+  </header>
+  <main
+    class="mx-auto flex min-h-[calc(100vh-392px)] w-full gap-4 px-3 sm:max-w-[576px] md:max-w-[720px] lg:max-w-[976px] xl:max-w-[1140px] 2xl:max-w-[1320px]"
+  >
+    <div class="mt-8 w-full">
+      <div class="flex items-center justify-between">
+        <h1 class="text-[36px]">Geld Tokens On Sale</h1>
+        <div class="flex items-center gap-4">
+          <button pButton severity="secondary">
+            <span>Albedo Connected</span>
+            <iconify-icon
+              icon="lucide:link-2"
+              class="ml-2 text-[1.5rem]"
+            ></iconify-icon>
+          </button>
+        </div>
+      </div>
+      <form class="mt-8" [formGroup]="marketPlaceSearchForm">
+        <p-iconField iconPosition="left">
+          <p-inputIcon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              class="scale-125"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21l-4.3-4.3"></path>
+              </g>
+            </svg>
+          </p-inputIcon>
+          <input
+            type="text"
+            pInputText
+            placeholder="Search"
+            class="w-full"
+            formControlName="search"
+          />
+        </p-iconField>
+      </form>
+      <section class="mb-24 mt-12 grid grid-cols-3 gap-8">
+        @for (t of tokens();track t._id) {
+        <app-marketplace-token-card [props]="t"></app-marketplace-token-card>
+        }
+      </section>
+    </div>
+  </main>
+  <footer
+    class="flex h-[92px] items-center justify-between bg-black px-8 text-white"
+  >
+    <p>Copyright © 2024, Geld.Network. All Rights Reserved.</p>
+    <nav aria-label="footer navigation">
+      <ul class="flex items-center gap-8">
+        <li><a>Accessibility</a></li>
+        <li><a>Privacy Policy</a></li>
+        <li><a>Do Not Sell My Personal Information</a></li>
+      </ul>
+    </nav>
+  </footer>
+</div>

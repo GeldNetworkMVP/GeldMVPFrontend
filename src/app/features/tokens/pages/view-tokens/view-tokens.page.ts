@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 
 import { TokenCardComponent } from '@features/tokens/components/token-card/token-card.component';
@@ -22,6 +23,7 @@ import { TokensState } from '../../stores/tokens-store/tokens.state';
 export class ViewTokensPageComponent implements OnInit {
   store = inject(Store);
   tokensService = inject(TokensService);
+  router = inject(Router);
 
   tokens = this.store.selectSignal(TokensState.getTokens);
   loading = this.store.selectSignal(TokensState.getTokensLoading);
@@ -39,7 +41,7 @@ export class ViewTokensPageComponent implements OnInit {
   }
 
   onAddTokenClick() {
-    console.log('Add stage button clicked');
+    return () => this.router.navigate(['/dashboard/tokens/new']);
   }
 
   onViewMarketClick() {
