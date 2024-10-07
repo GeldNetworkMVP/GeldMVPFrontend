@@ -187,6 +187,8 @@ export class UpdateStageDialogComponent implements OnInit {
       })),
     };
 
+    // TODO: REMEMBER TO ADD USER ID LATER
+
     console.log('Form data ', formData);
 
     this.stagesService.updateStage(formData).subscribe({

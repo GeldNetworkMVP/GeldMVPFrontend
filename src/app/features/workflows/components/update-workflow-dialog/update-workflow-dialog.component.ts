@@ -25,14 +25,15 @@ import { OrderListModule } from 'primeng/orderlist';
 import { ToastModule } from 'primeng/toast';
 
 import { StagesService } from '@features/stages/services/stages.service';
-import { SaveWorkflowDto } from '@features/workflows/dto/save-workflow.dto';
 import { WorkflowsService } from '@features/workflows/services/workflows.service';
+
+import { Workflow } from '../../models/workflow.model';
 
 @Component({
   standalone: true,
-  selector: 'app-add-workflow-dialog',
-  templateUrl: './add-workflow-dialog.component.html',
-  styleUrls: ['./add-workflow-dialog.component.scss'],
+  selector: 'app-update-workflow-dialog',
+  templateUrl: './update-workflow-dialog.component.html',
+  styleUrls: ['./update-workflow-dialog.component.scss'],
   imports: [
     DialogModule,
     InputTextModule,
@@ -45,18 +46,19 @@ import { WorkflowsService } from '@features/workflows/services/workflows.service
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AddWorkflowDialogComponent implements OnInit {
+export class UpdateWorkflowDialogComponent implements OnInit {
   stagesService = inject(StagesService);
   workflowsService = inject(WorkflowsService);
   messageService = inject(MessageService);
 
   stageOptions = signal<StageOption[]>([]);
   saving = signal(false);
-  addDialogVisibility = signal(false);
-
+  updateDialogVisibility = signal(false);
 
   visible = input.required<WritableSignal<boolean>>();
-  addWorkflow = output();
+
+  selectedWorkflowToUpdate = input<Workflow | null>(null);
+  updateWorkflow = output();
 
   addWorkflowForm = new FormGroup({
     name: new FormControl<string>('', [
@@ -77,14 +79,23 @@ export class AddWorkflowDialogComponent implements OnInit {
   constructor() {
     effect(
       () => {
-        this.addDialogVisibility.set(this.visible()());
+        this.updateDialogVisibility.set(this.visible()());
       },
       { allowSignalWrites: true }
     );
 
     effect(
       () => {
-        this.visible().set(this.addDialogVisibility());
+        this.visible().set(this.updateDialogVisibility());
+      },
+      { allowSignalWrites: true }
+    );
+
+    effect(
+      () => {
+        if (this.selectedWorkflowToUpdate()) {
+          this.initFormValues();
+        }
       },
       { allowSignalWrites: true }
     );
@@ -92,6 +103,15 @@ export class AddWorkflowDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStageOptions();
+  }
+
+  initFormValues() {
+    const workflow = this.selectedWorkflowToUpdate();
+    if (workflow) {
+      this.addWorkflowForm.controls.name.setValue(workflow.workflowname);
+      this.addWorkflowForm.controls.description.setValue(workflow.description);
+      this.addWorkflowForm.controls.stages.setValue(workflow.stages);
+    }
   }
 
   loadStageOptions() {
@@ -107,7 +127,8 @@ export class AddWorkflowDialogComponent implements OnInit {
   onSubmit() {
     this.saving.set(true);
     const value = this.addWorkflowForm.value;
-    const formData: SaveWorkflowDto = {
+    const formData: Workflow = {
+      _id: this.selectedWorkflowToUpdate()?._id as string,
       workflowname: value.name as string,
       description: value.description as string,
       stages: value.stages as string[],
@@ -115,24 +136,24 @@ export class AddWorkflowDialogComponent implements OnInit {
 
     // TODO: REMEMBER TO ADD USER ID LATER
 
-    this.workflowsService.saveWorkflow(formData).subscribe({
+    this.workflowsService.updateWorkflow(formData).subscribe({
       complete: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Workflow added successfully',
+          detail: 'Workflow updated successfully',
         });
-        this.addDialogVisibility.set(false);
+        this.updateDialogVisibility.set(false);
         this.resetForm();
         this.saving.set(false);
-        this.addWorkflow.emit();
+        this.updateWorkflow.emit();
       },
       error: (error) => {
         console.error(error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to add workflow',
+          detail: 'Failed to update workflow',
         });
         this.saving.set(false);
       },
@@ -140,7 +161,7 @@ export class AddWorkflowDialogComponent implements OnInit {
   }
 
   cancelAdding() {
-    this.addDialogVisibility.set(false);
+    this.updateDialogVisibility.set(false);
     this.resetForm();
   }
 }

@@ -1,13 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 
 import { AddWorkflowDialogComponent } from '@features/workflows/components/add-workflow-dialog/add-workflow-dialog.component';
-import {
-  WorkflowCardComponent,
-} from '@features/workflows/components/workflow-card/workflow-card.component';
+import { WorkflowCardComponent } from '@features/workflows/components/workflow-card/workflow-card.component';
 import { Workflow } from '@features/workflows/models/workflow.model';
 import { WorkflowsService } from '@features/workflows/services/workflows.service';
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
+
+import { UpdateWorkflowDialogComponent } from '../../components/update-workflow-dialog/update-workflow-dialog.component';
 
 @Component({
   selector: 'app-view-workflows-page',
@@ -18,6 +18,7 @@ import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page
     DashboardPageWrapperComponent,
     WorkflowCardComponent,
     AddWorkflowDialogComponent,
+    UpdateWorkflowDialogComponent,
   ],
 })
 export class ViewWorkflowsPageComponent implements OnInit {
@@ -27,6 +28,9 @@ export class ViewWorkflowsPageComponent implements OnInit {
 
   visible = signal(false);
   loading = signal(false);
+
+  selectedWorkflowToUpdate = signal<Workflow | null>(null);
+  updateModalVisible = signal(false);
 
   ngOnInit(): void {
     this.loadWorkflows();
@@ -50,5 +54,23 @@ export class ViewWorkflowsPageComponent implements OnInit {
     return () => {
       this.visible.set(true);
     };
+  }
+
+  showUpdateDialog(workflow: Workflow) {
+    return () => {
+      this.selectedWorkflowToUpdate.set(workflow);
+      this.updateModalVisible.set(true);
+    };
+  }
+
+  constructor() {
+    effect(
+      () => {
+        if (!this.updateModalVisible()) {
+          this.selectedWorkflowToUpdate.set(null);
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 }
