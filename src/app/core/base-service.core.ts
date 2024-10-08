@@ -40,7 +40,7 @@ export class BaseService {
     );
   }
 
-  delete(urlPart: HttpDeleteParams[0], options: HttpDeleteParams[1]) {
+  delete(urlPart: HttpDeleteParams[0], options?: HttpDeleteParams[1]) {
     return this.http.delete(`${environment.apiUrl}/${urlPart}`, options);
   }
 

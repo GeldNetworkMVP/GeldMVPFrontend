@@ -7,10 +7,11 @@
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
     @for (stage of stages();track stage._id) {
-    <app-stage-card [props]="stage" [index]="$index" (stageSelectedToUpdate)="showUpdateDialog($event)()" ></app-stage-card>
+    <app-stage-card [props]="stage" [index]="$index" (stageSelectedToUpdate)="showUpdateDialog($event)()" (stageSelectedToDelete)="confirmDelete($event)" ></app-stage-card>
     }
   </div>
 </app-dashboard-page-wrapper>
 <app-add-stage-dialog [visible]="visible" (addStage)="loadStages()" />
 <app-update-stage-dialog [visible]="updateModalVisible" (updateStage)="loadStages()" [selectedStageToUpdate]="selectedStageToUpdate()" />
 
+<p-confirmDialog />

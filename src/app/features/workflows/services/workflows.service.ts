@@ -19,4 +19,9 @@ export class WorkflowsService extends BaseService {
   getAllWorkflowsWithoutPagination() {
     return this.get<GetAllWorkflowsWithoutPaginationDto>('workflows');
   }
+
+
+  removeWorkflowById(id: string) {
+    return this.delete(`workflows/remove/${id}`);
+  }
 }

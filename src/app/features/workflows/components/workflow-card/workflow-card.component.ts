@@ -18,12 +18,18 @@ export class WorkflowCardComponent {
 
 
   workflowSelectedToUpdate = output<Workflow>()
+  workflowSelectedToDelete = output<Workflow>()
+
 
   updateModalVisible = signal(false);
 
   openEditDialog() {
     this.updateModalVisible.set(true);
     this.workflowSelectedToUpdate.emit(this.props())
+  }
+
+  openDeleteDialog() {
+    this.workflowSelectedToDelete.emit(this.props())
   }
 
 }
