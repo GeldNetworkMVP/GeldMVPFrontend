@@ -24,6 +24,7 @@ export class StageCardComponent {
   index = input.required<number>();
 
   stageSelectedToUpdate = output<Stage>()
+  stageSelectedToDelete = output<Stage>()
 
   num = computed(() => this.index() + 1);
   numOfFields = computed(() => this.props().fields.length);
@@ -33,6 +34,10 @@ export class StageCardComponent {
   openEditDialog() {
     this.updateModalVisible.set(true);
     this.stageSelectedToUpdate.emit(this.props())
+  }
+
+  openDeleteDialog() {
+    this.stageSelectedToDelete.emit(this.props())
   }
 
 }

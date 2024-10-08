@@ -18,6 +18,10 @@ export class StagesService extends BaseService {
         return this.put('updatestage', dto);
     }
 
+    removeStageById(id: string) {
+        return this.delete(`stage/remove/${id}`);
+    }
+
 
     getAllStagesWithoutPagination() {
         return this.get<GetAllStagesWithoutPaginationDto>('stages');
