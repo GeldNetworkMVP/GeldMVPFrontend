@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { injectParams } from 'ngxtension/inject-params';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { first } from 'rxjs';
 
@@ -33,6 +34,7 @@ interface Column {
     DashboardPageWrapperComponent,
     CommonModule,
     TableModule,
+    PaginatorModule,
     UpdateMasterDataContainerDialogComponent,
   ],
 })
@@ -69,6 +71,18 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
 
   masterRecords = signal<MasterDataRecord[]>([]);
   loading = signal(false);
+  loadingData = signal(false);
+
+  first = signal<number>(0);
+  totalRecords = signal(0);
+  rows = signal(10);
+  page = signal(0);
+
+  handlePagination(event: PaginatorState) {
+    this.first.set(event.first ?? 0);
+    this.rows.set(event.rows ?? 10);
+    this.page.set((event.page ?? 0) + 1);
+  }
 
   ngOnInit(): void {
     this.loadRecords();
@@ -90,7 +104,8 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   constructor() {
     effect(
       () => {
-        this.loading.set(true);
+        this.masterRecords.set([]);
+        this.loadingData.set(true);
         const dataid = this.containerId() ?? '';
         const fields = this.masterDataFields();
         if (fields.length === 0) {
@@ -100,8 +115,8 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
           .getAllRecordsPaginatedByContainerId({
             dataid,
             fields,
-            limit: 100,
-            page: 1,
+            limit: this.rows(),
+            page: this.page(),
             sort: 1,
           })
           .pipe(first())
@@ -109,7 +124,8 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
             next: (data) => {
               console.log(data.Response.content);
               this.masterRecords.set(data.Response.content);
-              this.loading.set(false);
+              this.loadingData.set(false);
+              this.totalRecords.set(data.Response.PaginationInfo.totalelements);
             },
           });
       },
