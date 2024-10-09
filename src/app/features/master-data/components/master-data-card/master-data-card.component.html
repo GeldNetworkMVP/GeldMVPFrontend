@@ -5,7 +5,7 @@
   (keydown)="navigateToMasterDataContainer()"
 >
   <div class="flex items-center justify-end">
-    <button>
+    <button (click)="openDeleteDialog($event)">
       <iconify-icon icon="lucide:trash" class="text-brand-gray" />
     </button>
   </div>

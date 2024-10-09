@@ -1,7 +1,85 @@
-<app-dashboard-page-wrapper title="Create token">
-    <div class="flex h-[500px]">
-        <section class="w-2/5">
-            <form action=""></form>
-        </section>
-    </div>
+<app-dashboard-page-wrapper
+  title="Generate New token"
+  [primaryButton]="{
+    action: onGenerateBtnClick(),
+    label: 'Generate',
+    severity: 'primary',
+    icon: 'sparkles',
+    loading: saving()
+}"
+>
+  <div class="flex h-[500px]">
+    <section class="flex w-full gap-4">
+      <form [formGroup]="formGroup" class="mt-4 flex w-2/5 flex-col gap-4">
+        <div class="flex w-full flex-col gap-2">
+          <label for="plot">Select plot</label>
+          <p-dropdown
+            [options]="plots()"
+            appendTo="body"
+            optionLabel="collectionname"
+            optionValue="_id"
+            [filter]="true"
+            filterBy="collectionname"
+            styleClass="w-full"
+            formControlName="plot"
+            placeholder="Select the plot"
+            id="plot"
+            name="plot"
+            (onChange)="onSelectPlot($event)"
+          />
+        </div>
+        <div class="flex w-full flex-col gap-2">
+          <label for="name">Token Name</label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            formControlName="tokenName"
+            placeholder="Enter token name"
+            variant="filled"
+          />
+          @if(formGroup.getError('tokenName')?.invalid &&
+          formGroup.getError('tokenName')?.touched) {
+          <small class="text-red-500"> Token name is required </small>
+          }
+        </div>
+        <div class="flex w-full flex-col gap-2">
+          <label for="price">Plot Valued Price</label>
+          <input
+            id="price"
+            type="number"
+            pInputText
+            formControlName="price"
+            placeholder="Enter price"
+            variant="filled"
+          />
+          @if(formGroup.getError('price')?.invalid &&
+          formGroup.getError('price')?.touched) {
+          <small class="text-red-500"> Price is required </small>
+          }
+        </div>
+        <div class="flex w-full flex-col gap-2">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            type="text"
+            pInputTextarea
+            formControlName="description"
+            placeholder="Enter description"
+            variant="filled"
+          ></textarea>
+          @if(formGroup.getError('description')?.invalid &&
+          formGroup.getError('description')?.touched) {
+          <small class="text-red-500"> Description is required </small>
+          }
+        </div>
+      </form>
+      <div class="mt-4 w-3/5">
+        <h2>Token Preview</h2>
+        <div class="mt-2 aspect-[3/3.5] w-full rounded-md border border-gray-300 bg-gray-50 "></div>
+      </div>
+    </section>
+  </div>
 </app-dashboard-page-wrapper>
+
+<p-toast />

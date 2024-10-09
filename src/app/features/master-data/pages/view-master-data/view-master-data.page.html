@@ -7,9 +7,17 @@
 >
   <div class="my-6 grid grid-cols-3 gap-8">
     @for (md of masterData();track md._id) {
-    <app-master-data-card [props]="md"></app-master-data-card>
+    <app-master-data-card
+      [props]="md"
+      (containerSelectedToDelete)="confirmDelete($event)"
+    ></app-master-data-card>
     }
   </div>
 </app-dashboard-page-wrapper>
 
-<app-add-master-data-container-dialog [visible]="visible" (addNewMasterData)="loadMasterData()" />
+<app-add-master-data-container-dialog
+  [visible]="visible"
+  (addNewMasterData)="loadMasterData()"
+/>
+<p-confirmDialog />
+<p-toast />

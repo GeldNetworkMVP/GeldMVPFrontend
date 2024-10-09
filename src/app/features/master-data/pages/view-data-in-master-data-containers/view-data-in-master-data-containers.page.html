@@ -4,6 +4,11 @@
     label: 'Add New',
     action: goToCreateRecordPage()
   }"
+  [secondaryButton]="{
+    label: 'Edit Container',
+    action: openUpdateDialog(),
+    icon: 'pen'
+  }"
 >
   @if(!loading()) {
   <p-table
@@ -28,3 +33,8 @@
   </p-table>
   }
 </app-dashboard-page-wrapper>
+<app-update-master-data-container-dialog
+  [visible]="updateDialogVisible"
+  [selectedContainerToUpdate]="selectedMasterDataContainer()"
+  (updateMasterData)="loadRecords()"
+/>
