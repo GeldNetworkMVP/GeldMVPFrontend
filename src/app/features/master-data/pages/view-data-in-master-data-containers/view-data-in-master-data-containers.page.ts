@@ -14,6 +14,7 @@ import { first } from 'rxjs';
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
 
+import { UpdateMasterDataContainerDialogComponent } from '../../components/update-master-data-container-dialog/update-master-data-container-dialog.component';
 import { MasterDataContainer } from '../../models/master-data-container.model';
 import { MasterDataRecord } from '../../models/master-data-record.model';
 import { MasterDataService } from '../../services/master-data.service';
@@ -28,7 +29,12 @@ interface Column {
   selector: 'app-view-data-in-master-data-containers-page',
   templateUrl: './view-data-in-master-data-containers.page.html',
   styleUrls: ['./view-data-in-master-data-containers.page.scss'],
-  imports: [DashboardPageWrapperComponent, CommonModule, TableModule],
+  imports: [
+    DashboardPageWrapperComponent,
+    CommonModule,
+    TableModule,
+    UpdateMasterDataContainerDialogComponent,
+  ],
 })
 export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   containerId = injectParams('id');
@@ -36,8 +42,8 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   masterDataService = inject(MasterDataService);
   router = inject(Router);
 
-
   selectedMasterDataContainer = signal<MasterDataContainer | null>(null);
+  updateDialogVisible = signal(false);
 
   masterDataContainerName = computed(() => {
     return this.selectedMasterDataContainer()?.dataname ?? '';
@@ -65,6 +71,10 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   loading = signal(false);
 
   ngOnInit(): void {
+    this.loadRecords();
+  }
+
+  loadRecords() {
     this.loading.set(true);
     this.masterDataService
       .getMasterDataContainer(this.containerId() ?? '')
@@ -83,6 +93,9 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
         this.loading.set(true);
         const dataid = this.containerId() ?? '';
         const fields = this.masterDataFields();
+        if (fields.length === 0) {
+          return;
+        }
         this.masterDataService
           .getAllRecordsPaginatedByContainerId({
             dataid,
@@ -113,5 +126,9 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
       this.router.navigate([
         `/dashboard/master-data/${this.containerId()}/new`,
       ]);
+  }
+
+  openUpdateDialog() {
+    return () => this.updateDialogVisible.set(true);
   }
 }

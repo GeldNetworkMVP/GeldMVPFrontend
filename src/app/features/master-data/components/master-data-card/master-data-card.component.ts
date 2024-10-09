@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 
@@ -17,8 +17,16 @@ export class MasterDataCardComponent {
 
   router = inject(Router);
 
+  containerSelectedToDelete = output<MasterDataContainer>()
+
+
   navigateToMasterDataContainer() {
     this.router.navigate(['/dashboard/master-data', this.props()._id]);
+  }
+
+  openDeleteDialog(event: Event) {
+    event.stopPropagation();
+    this.containerSelectedToDelete.emit(this.props())
   }
 }
 

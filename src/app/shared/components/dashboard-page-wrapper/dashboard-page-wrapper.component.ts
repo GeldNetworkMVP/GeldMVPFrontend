@@ -28,11 +28,16 @@ export class DashboardPageWrapperComponent implements OnInit {
   primaryButton = input<{
     action: () => void;
     label: string;
+    icon?: string;
+    severity?: "success" | "info" | "warning" | "danger" | "help" | "primary" | "secondary" | "contrast" | null | undefined,
+    loading?: boolean;
   }>()
 
   secondaryButton = input<{
     action: () => void;
     label: string;
+    icon?: string;
+    severity?: "success" | "info" | "warning" | "danger" | "help" | "primary" | "secondary" | "contrast" | null | undefined
   }>()
 
 

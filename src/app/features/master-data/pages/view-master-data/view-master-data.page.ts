@@ -1,7 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FocusTrapModule } from 'primeng/focustrap';
+import {ToastModule} from 'primeng/toast';
 import { first } from 'rxjs';
 
 import { AddMasterDataContainerDialogComponent } from '@features/master-data/components/add-master-data-container-dialog/add-master-data-container-dialog.component';
@@ -10,7 +13,11 @@ import { MasterDataService } from '@features/master-data/services/master-data.se
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
 
-import { SetMasterDataContainers, SetMasterDataContainersLoading } from '../../stores/master-data-store/master-data.actions';
+import { MasterDataContainer } from '../../models/master-data-container.model';
+import {
+  SetMasterDataContainers,
+  SetMasterDataContainersLoading,
+} from '../../stores/master-data-store/master-data.actions';
 import { MasterDataState } from '../../stores/master-data-store/master-data.state';
 
 @Component({
@@ -24,11 +31,15 @@ import { MasterDataState } from '../../stores/master-data-store/master-data.stat
     DialogModule,
     FocusTrapModule,
     AddMasterDataContainerDialogComponent,
+    ToastModule,
+    ConfirmDialogModule,
   ],
 })
 export class ViewMasterDataPageComponent implements OnInit {
   store = inject(Store);
   masterDataService = inject(MasterDataService);
+  confirmationService = inject(ConfirmationService);
+  messageService = inject(MessageService);
 
   visible = signal(false);
   dummyMasterData = [
@@ -56,5 +67,39 @@ export class ViewMasterDataPageComponent implements OnInit {
     return () => {
       this.visible.set(true);
     };
+  }
+
+  confirmDelete(container: MasterDataContainer) {
+    this.confirmationService.confirm({
+      message: `Do you want to delete '${container.dataname}' container? Note that all the data in this container will be lost.`,
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+
+      accept: () => {
+        this.masterDataService
+          .removeMasterDataContainer(container._id)
+          .subscribe({
+            next: () => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Container deleted successfully',
+              });
+              this.loadMasterData();
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to delete container',
+              });
+            },
+          });
+      },
+    });
   }
 }
