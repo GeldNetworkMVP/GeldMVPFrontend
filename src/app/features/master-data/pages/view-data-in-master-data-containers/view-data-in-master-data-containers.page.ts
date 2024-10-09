@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
+  CUSTOM_ELEMENTS_SCHEMA,
   effect,
   inject,
   OnInit,
@@ -9,9 +10,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { injectParams } from 'ngxtension/inject-params';
+import { ButtonModule } from 'primeng/button';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { first } from 'rxjs';
+
+import { eachWordsFirstLetterCapitalized } from '@app/shared/utils/text-utils.utils';
 
 import { DashboardPageWrapperComponent } from '@shared/components/dashboard-page-wrapper/dashboard-page-wrapper.component';
 
@@ -35,8 +39,10 @@ interface Column {
     CommonModule,
     TableModule,
     PaginatorModule,
+    ButtonModule,
     UpdateMasterDataContainerDialogComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   containerId = injectParams('id');
@@ -63,9 +69,12 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   columns = computed<Column[]>(() => {
     const c = this.masterDataFields().map((field) => ({
       field,
-      header: field,
+      header: eachWordsFirstLetterCapitalized(field),
     }));
-    console.log(c);
+    c.push({
+      field: 'actions',
+      header: '',
+    });
     return c;
   });
 
@@ -146,5 +155,12 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
 
   openUpdateDialog() {
     return () => this.updateDialogVisible.set(true);
+  }
+
+  goToUpdatePage(record: MasterDataRecord) {
+    return () => this.router.navigate(
+      [`/dashboard/master-data/${this.containerId()}/edit/${record._id}`],
+      { state: { record } }
+    );
   }
 }

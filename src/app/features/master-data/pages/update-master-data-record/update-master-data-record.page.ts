@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { injectParams } from 'ngxtension/inject-params';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -14,12 +14,13 @@ import { eachWordsFirstLetterCapitalized } from '@app/shared/utils/text-utils.ut
 
 import { SaveMasterdataRecordDto } from '../../dto/save-masterdata-record.dto';
 import { MasterDataContainer } from '../../models/master-data-container.model';
+import { MasterDataRecord } from '../../models/master-data-record.model';
 import { MasterDataService } from '../../services/master-data.service';
 
 @Component({
-  selector: 'app-create-master-record-page',
-  templateUrl: './create-master-data-record.page.html',
-  styleUrls: ['./create-master-data-record.page.scss'],
+  selector: 'app-update-master-record-page',
+  templateUrl: './update-master-data-record.page.html',
+  styleUrls: ['./update-master-data-record.page.scss'],
   standalone: true,
   imports: [
     DashboardPageWrapperComponent,
@@ -29,12 +30,12 @@ import { MasterDataService } from '../../services/master-data.service';
     ...commonModules,
   ],
 })
-export class CreateMasterRecordPageComponent implements OnInit {
+export class UpdateMasterRecordPageComponent implements OnInit {
   containerId = injectParams('id');
   masterDataService = inject(MasterDataService);
   messageService = inject(MessageService);
   router = inject(Router);
-
+  activatedRoute = inject(ActivatedRoute);
 
   selectedMasterDataContainer = signal<MasterDataContainer | null>(null);
 
@@ -43,8 +44,8 @@ export class CreateMasterRecordPageComponent implements OnInit {
   });
 
   masterDataFields = computed(() => {
-    const rawFields = this.selectedMasterDataContainer()?.mfields ?? [];
-    return rawFields.filter((field) => field !== '_id');
+    const fields = this.selectedMasterDataContainer()?.mfields ?? [];
+    return fields.filter((field) => field !== '_id');
   });
 
   formMetadata = computed(() => {
@@ -80,6 +81,15 @@ export class CreateMasterRecordPageComponent implements OnInit {
           this.loading.set(false);
         },
       });
+
+    if (history) {
+      const record = history.state.record as MasterDataRecord;
+      const keys = Object.keys(record).filter((key) => key !== '_id' && key !== 'dataid');
+      console.log(this.formGroup());
+      keys.forEach((key) => {
+        this.formGroup().get(key)?.setValue(record[key]);
+      });
+    }
   }
 
   onSubmit() {

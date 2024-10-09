@@ -31,6 +31,13 @@ export const masterDataRoutes: Routes = [
                 './pages/create-master-data-record/create-master-data-record.page'
               ).then((m) => m.CreateMasterRecordPageComponent),
           },
+          {
+            path: 'edit/:recordId',
+            loadComponent: () =>
+              import(
+                './pages/update-master-data-record/update-master-data-record.page'
+              ).then((m) => m.UpdateMasterRecordPageComponent),
+          },
         ],
       },
     ],

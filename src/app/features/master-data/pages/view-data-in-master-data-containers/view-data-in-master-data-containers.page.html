@@ -16,19 +16,37 @@
     [value]="masterRecords()"
     [tableStyle]=" loadingData () ? { 'min-width': '50rem', 'min-height': 'calc(100vh - 300px)' }: {'min-width': '50rem',}"
     [loading]="loadingData()"
+    scrollDirection="both"
+    [scrollable]="true"
+    styleClass="mt-4"
   >
     <ng-template pTemplate="header">
       <tr>
-        @for (col of columns();track col.field) {
+        @for (col of columns();track col.field) { @if($index === 0) {
+        <th [id]="col.field" pFrozenColumn>{{ col.header }}</th>
+        } @else { @if($index === columns().length - 1) {
+        <th [id]="col.field" pFrozenColumn alignFrozen="right" [frozen]="true">
+          
+        </th>
+        } @else {
         <th [id]="col.field">{{ col.header }}</th>
-        }
+        } } }
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        @for (col of columns();track col.field) {
+        @for (col of columns();track col.field) { @if($index === 0) {
+        <td pFrozenColumn>{{ rowData[col.field] }}</td>
+        } @else { @if($index === columns().length - 1) {
+        <td pFrozenColumn alignFrozen="right" [frozen]="true">
+          <p-button severity="secondary" text styleClass="flex items-center gap-2" (onClick)="goToUpdatePage(rowData)()" >
+            <span>Edit</span>
+            <iconify-icon icon="lucide:pen" />
+          </p-button>
+        </td>
+        } @else {
         <td>{{ rowData[col.field] }}</td>
-        }
+        } } }
       </tr>
     </ng-template>
   </p-table>
