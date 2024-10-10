@@ -77,4 +77,8 @@ export class MasterDataService extends BaseService {
   removeMasterDataContainer(containerId: string) {
     return this.delete(`masterdata/remove/${containerId}`);
   }
+
+  removeRecord(recordId: string) {
+    return this.delete(`record/remove/${recordId}`);
+  }
 }

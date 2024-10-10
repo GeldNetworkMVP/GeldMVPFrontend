@@ -2,8 +2,9 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { injectParams } from 'ngxtension/inject-params';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { first } from 'rxjs';
@@ -26,6 +27,7 @@ import { MasterDataService } from '../../services/master-data.service';
     DashboardPageWrapperComponent,
     InputTextModule,
     ButtonModule,
+    ConfirmDialogModule,
     ToastModule,
     ...commonModules,
   ],
@@ -36,6 +38,7 @@ export class UpdateMasterRecordPageComponent implements OnInit {
 
   masterDataService = inject(MasterDataService);
   messageService = inject(MessageService);
+  confirmationService = inject(ConfirmationService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
 
@@ -154,5 +157,47 @@ export class UpdateMasterRecordPageComponent implements OnInit {
           console.error(err);
         },
       });
+  }
+
+  onDeleteButtonClick() {
+    return () => {
+      this.confirmationService.confirm({
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptButtonStyleClass: 'p-button-danger p-button-text',
+        rejectButtonStyleClass: 'p-button-text p-button-text',
+        acceptIcon: 'none',
+        rejectIcon: 'none',
+        message: `Are you sure you want to delete this record, '${
+          this.selectedRecord()?.collectionname
+        }' ?`,
+        accept: () => {
+          this.masterDataService
+            .removeRecord(this.recordId() as string)
+            .pipe(first())
+            .subscribe({
+              next: () => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Record deleted',
+                  detail: 'Record deleted successfully',
+                });
+                this.router.navigate([
+                  '/dashboard/master-data',
+                  this.containerId(),
+                ]);
+              },
+              error: (err) => {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'An error occurred while deleting the record',
+                });
+                console.error(err);
+              },
+            });
+        },
+      });
+    };
   }
 }

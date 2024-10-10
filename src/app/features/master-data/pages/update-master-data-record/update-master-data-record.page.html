@@ -1,5 +1,11 @@
 <app-dashboard-page-wrapper
-  [title]="'Add new record in '+ masterDataContainerName()"
+  title="Update record"
+  [primaryButton]="{
+    label: 'Delete',
+    action: onDeleteButtonClick(),
+    icon: 'trash',
+    severity: 'danger'
+  }"
 >
   <div class="flex h-[500px]">
     <section class="w-3/5">
@@ -39,3 +45,4 @@
   </div>
 </app-dashboard-page-wrapper>
 <p-toast />
+<p-confirmDialog />
