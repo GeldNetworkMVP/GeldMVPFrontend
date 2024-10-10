@@ -44,11 +44,7 @@ export class CreateMasterRecordPageComponent implements OnInit {
 
   masterDataFields = computed(() => {
     const rawFields = this.selectedMasterDataContainer()?.mfields ?? [];
-    const fields =
-      this.containerId() === '66d71f5af2999f18ef9f9d30'
-        ? ['templatename', 'contact', 'description', 'location']  // TODO: CHECK IF IT SHOULD BE 'templatename' OR 'collectionname'
-        : rawFields;
-    return fields.filter((field) => field !== '_id');
+    return rawFields.filter((field) => field !== '_id');
   });
 
   formMetadata = computed(() => {
