@@ -4,6 +4,6 @@ export interface SaveTokenDto {
   description: string;
   price: string;
   filetype?: string;
-  bcstatus: null;
+  bcstatus: null | string;
   bchash: null;
 }

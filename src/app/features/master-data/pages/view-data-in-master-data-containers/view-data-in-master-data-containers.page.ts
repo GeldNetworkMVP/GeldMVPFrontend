@@ -158,6 +158,7 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
   }
 
   goToUpdatePage(record: MasterDataRecord) {
+    console.log(record);
     return () => this.router.navigate(
       [`/dashboard/master-data/${this.containerId()}/edit/${record._id}`],
       { state: { record } }

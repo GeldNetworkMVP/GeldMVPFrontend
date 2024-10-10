@@ -112,7 +112,7 @@ export class CreateTokenPageComponent implements OnInit, OnDestroy {
           description: value.description as string,
           price: value.price as string,
           filetype: 'html', // TODO: CHECK IF THIS IS REQUIRED,
-          bcstatus: null, // TODO: CHECK THIS LATER
+          bcstatus: 'onsale', // TODO: CHECK THIS LATER
           bchash: null, // TODO: CHECK THIS LATER
         };
 

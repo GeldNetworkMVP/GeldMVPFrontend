@@ -12,7 +12,7 @@ import { DashboardPageWrapperComponent } from '@app/shared/components/dashboard-
 import { commonModules } from '@app/shared/modules/common.modules';
 import { eachWordsFirstLetterCapitalized } from '@app/shared/utils/text-utils.utils';
 
-import { SaveMasterdataRecordDto } from '../../dto/save-masterdata-record.dto';
+import { UpdateMasterdataRecordDto } from '../../dto/update-masterdata-record.dto';
 import { MasterDataContainer } from '../../models/master-data-container.model';
 import { MasterDataRecord } from '../../models/master-data-record.model';
 import { MasterDataService } from '../../services/master-data.service';
@@ -32,12 +32,15 @@ import { MasterDataService } from '../../services/master-data.service';
 })
 export class UpdateMasterRecordPageComponent implements OnInit {
   containerId = injectParams('id');
+  recordId = injectParams('recordId');
+
   masterDataService = inject(MasterDataService);
   messageService = inject(MessageService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
 
   selectedMasterDataContainer = signal<MasterDataContainer | null>(null);
+  selectedRecord = signal<MasterDataRecord | null>(null);
 
   masterDataContainerName = computed(() => {
     return this.selectedMasterDataContainer()?.dataname ?? '';
@@ -78,38 +81,66 @@ export class UpdateMasterRecordPageComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.selectedMasterDataContainer.set(data.Response);
-          this.loading.set(false);
+          this.masterDataService
+            .getMasterDataRecord(this.recordId() ?? '')
+            .pipe(first())
+            .subscribe({
+              next: (record) => {
+                this.selectedRecord.set(record);
+                if (record) {
+                  this.initForm(record);
+                }
+                this.loading.set(false);
+              },
+              error: (err) => {
+                console.error(err);
+                this.loading.set(false);
+              },
+            });
         },
       });
+  }
 
-    if (history) {
-      const record = history.state.record as MasterDataRecord;
-      const keys = Object.keys(record).filter((key) => key !== '_id' && key !== 'dataid');
-      console.log(this.formGroup());
-      keys.forEach((key) => {
-        this.formGroup().get(key)?.setValue(record[key]);
-      });
+  reset() {
+    const originalRecord = this.selectedRecord();
+    if (originalRecord) {
+      this.initForm(originalRecord);
     }
   }
 
+  initForm(record: MasterDataRecord) {
+    const keys = Object.keys(record).filter(
+      (key) => key !== '_id' && key !== 'dataid'
+    );
+    keys.forEach((key) => {
+      const control = this.formGroup().get(key);
+      if (control) {
+        control.setValue(record[key]);
+      }
+    });
+  }
+
   onSubmit() {
-    const formValue: SaveMasterdataRecordDto = {
-      dataid: this.containerId() as string,
-      ...this.formGroup().value,
-      // templatename: this.formGroup().value['collectionname'] as string,
+    const value = this.formGroup().value;
+    const formValue: UpdateMasterdataRecordDto = {
+      _id: this.recordId() as string,
+      dataobject: {
+        dataid: this.selectedRecord()?.dataid as string,
+        ...value,
+      },
     };
-    // delete formValue['collectionname'];
+
     this.saving.set(true);
     this.masterDataService
-      .saveMasterRecord(formValue)
+      .updateMasterRecord(formValue)
       .pipe(first())
       .subscribe({
         next: () => {
           this.saving.set(false);
           this.messageService.add({
             severity: 'success',
-            summary: 'Record saved',
-            detail: 'Record saved successfully',
+            summary: 'Record updated',
+            detail: 'Record updated successfully',
           });
           this.router.navigate(['/dashboard/master-data', this.containerId()]);
         },
@@ -118,7 +149,7 @@ export class UpdateMasterRecordPageComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'An error occurred while saving the record',
+            detail: 'An error occurred while updating the record',
           });
           console.error(err);
         },

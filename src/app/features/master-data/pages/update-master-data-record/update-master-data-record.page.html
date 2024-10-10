@@ -26,11 +26,11 @@
         </div>
         }
         <div class="mt-4 flex w-full items-center justify-between">
-          <p-button severity="secondary" type="button" (onClick)="formGroup().reset()">
+          <p-button severity="secondary" type="button" (onClick)="reset()">
             Reset
           </p-button>
-          <p-button [loading]="saving()" type="submit">
-            {{ formGroup().valid ? ( !saving() ? 'Add': 'Please wait ') : 'Fill
+          <p-button [loading]="saving()" type="submit" styleClass="flex items-center gap-2">
+            {{ formGroup().valid ? ( !saving() ? 'Update': 'Please wait ') : 'Fill
             all fields to proceed'}}
           </p-button>
         </div>
