@@ -3,4 +3,5 @@ export interface MasterDataContainer {
   dataname: string;
   description: string;
   mfields: string[] | null;
+  noOfRecords: number
 }

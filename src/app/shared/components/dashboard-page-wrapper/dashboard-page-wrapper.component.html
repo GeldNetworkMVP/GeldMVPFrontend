@@ -51,6 +51,7 @@
         (click)="primaryButton()?.action()"
         [severity]="primaryButton()?.severity ?? 'secondary'"
         [loading]="primaryButton()?.loading ?? false"
+        [text]="!!primaryButton()?.text"
       >
         <span>{{ primaryButton()?.label }}</span>
         <iconify-icon

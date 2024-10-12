@@ -1,6 +1,7 @@
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {SkeletonModule} from 'primeng/skeleton'
 import { ToastModule } from 'primeng/toast';
 
 import { AddWorkflowDialogComponent } from '@features/workflows/components/add-workflow-dialog/add-workflow-dialog.component';
@@ -23,6 +24,7 @@ import { UpdateWorkflowDialogComponent } from '../../components/update-workflow-
     AddWorkflowDialogComponent,
     UpdateWorkflowDialogComponent,
     ToastModule,
+    SkeletonModule,
     ConfirmDialogModule,
   ],
 })
@@ -38,6 +40,8 @@ export class ViewWorkflowsPageComponent implements OnInit {
 
   selectedWorkflowToUpdate = signal<Workflow | null>(null);
   updateModalVisible = signal(false);
+
+  skeletons = [1, 2, 3, 4, 5, 6]
 
   ngOnInit(): void {
     this.loadWorkflows();

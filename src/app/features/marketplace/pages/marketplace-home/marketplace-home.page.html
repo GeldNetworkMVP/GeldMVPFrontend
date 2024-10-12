@@ -8,14 +8,14 @@
     <div
       class="mx-auto flex w-full items-center justify-between gap-4 px-3 sm:max-w-[576px] md:max-w-[720px] lg:max-w-[976px] xl:max-w-[1140px] 2xl:max-w-[1320px]"
     >
-      <div class="flex items-center gap-2">
+      <a class="flex items-center gap-2" [routerLink]="'/'">
         <img
           src="assets/images/geld-logo-1.png"
           alt="Geld Logo"
           class="h-[60px] w-[90px]"
         />
         <p class="text-[40px]"><span class="font-[700]">Geld.</span> Network</p>
-      </div>
+      </a>
       <nav class="flex items-center gap-4" aria-label="Marketplace Navigation">
         <a
           routerLink="/dashboard"
@@ -24,8 +24,10 @@
           Geld Portal
         </a>
         <a
-          routerLink="/dashboard"
-          class="flex h-[48px] items-center rounded-[9px] bg-[rgba(0,0,0,0.40)] px-[18px] text-white"
+          class="flex h-[48px] cursor-pointer items-center rounded-[9px] bg-[rgba(0,0,0,0.40)] px-[18px] text-white"
+          (click)="openSidebar()"
+          (keydown)="openSidebar()"
+          tabindex="0"
         >
           Connect Wallet
         </a>
@@ -89,11 +91,21 @@
           />
         </p-iconField>
       </form>
-      <section class="mb-24 mt-12 grid grid-cols-3 gap-8">
-        @for (t of tokens();track t._id) {
+      <section class="mb-6 mt-12 grid grid-cols-3 gap-8">
+        @if(!loading()) { @for (t of tokens();track t._id) {
         <app-marketplace-token-card [props]="t"></app-marketplace-token-card>
-        }
+        } } @else { @for(num of skeletons; track num) {
+        <p-skeleton height="345.14px" />
+        } }
       </section>
+      <p-paginator
+        (onPageChange)="handlePagination($event)"
+        [rows]="rows()"
+        [totalRecords]="totalRecords()"
+        [first]="first()"
+        [rowsPerPageOptions]="[10, 15, 20, 25, 30, 40, 50, 75, 100]"
+        styleClass="mb-8"
+      ></p-paginator>
     </div>
   </main>
   <footer
@@ -109,3 +121,21 @@
     </nav>
   </footer>
 </div>
+
+<p-sidebar [(visible)]="sidebarVisible" position="right">
+  <ng-template pTemplate="header">
+    <div class="align-items-center flex">Connect Wallet</div>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <div class="pt-3">
+      <ul class="flex flex-col gap-2">
+        <li
+          class="flex cursor-pointer items-center justify-between rounded-lg p-2 transition-all hover:bg-[rgba(0,0,0,0.05)]"
+        >
+          <img src="assets/images/freighter-logo.svg" alt="Freighter" />
+          <span class="mr-2 text-right">Freighter</span>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</p-sidebar>

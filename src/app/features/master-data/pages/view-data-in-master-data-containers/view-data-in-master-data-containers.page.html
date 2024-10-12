@@ -40,8 +40,7 @@
         } @else { @if($index === columns().length - 1) {
         <td pFrozenColumn alignFrozen="right" [frozen]="true">
           <p-button severity="secondary" text styleClass="flex items-center gap-2" (onClick)="goToUpdatePage(rowData)()" >
-            <span>Edit</span>
-            <iconify-icon icon="lucide:pen" />
+            <iconify-icon icon="lucide:chevron-right" />
           </p-button>
         </td>
         } @else {

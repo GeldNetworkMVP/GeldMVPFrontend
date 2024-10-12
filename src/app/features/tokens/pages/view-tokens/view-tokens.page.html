@@ -6,12 +6,22 @@
 }"
   [secondaryButton]="{
   label: 'Geld Market',
-  action: onViewMarketClick
+  action: onViewMarketClick()
 }"
 >
   <div class="mt-6 grid grid-cols-3 gap-8">
-    @for (t of tokens();track t._id) {
+    @if(!loading()) { @for (t of tokens();track t._id) {
     <app-token-card [props]="t"></app-token-card>
-    }
+    } } @else { @for(sk of skeletons; track sk) {
+    <p-skeleton height="291.08px" />
+    } }
   </div>
+  <p-paginator
+    (onPageChange)="handlePagination($event)"
+    [rows]="rows()"
+    [totalRecords]="totalRecords()"
+    [first]="first()"
+    [rowsPerPageOptions]="[10, 15, 20, 25, 30, 40, 50, 75, 100]"
+    styleClass="my-8"
+  ></p-paginator>
 </app-dashboard-page-wrapper>

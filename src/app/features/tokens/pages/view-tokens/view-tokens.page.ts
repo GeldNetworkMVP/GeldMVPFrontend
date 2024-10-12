@@ -1,6 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorState } from 'primeng/paginator';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { TokenCardComponent } from '@features/tokens/components/token-card/token-card.component';
 
@@ -18,7 +21,7 @@ import { TokensState } from '../../stores/tokens-store/tokens.state';
   templateUrl: './view-tokens.page.html',
   styleUrls: ['./view-tokens.page.scss'],
   standalone: true,
-  imports: [DashboardPageWrapperComponent, TokenCardComponent],
+  imports: [DashboardPageWrapperComponent, TokenCardComponent, PaginatorModule, SkeletonModule],
 })
 export class ViewTokensPageComponent implements OnInit {
   store = inject(Store);
@@ -28,15 +31,54 @@ export class ViewTokensPageComponent implements OnInit {
   tokens = this.store.selectSignal(TokensState.getTokens);
   loading = this.store.selectSignal(TokensState.getTokensLoading);
 
+  first = signal<number>(0);
+  totalRecords = signal(0);
+  rows = signal(10);
+  page = signal(0);
+
+  skeletons = [1, 2, 3, 4, 5, 6] 
+
+  handlePagination(event: PaginatorState) {
+    this.first.set(event.first ?? 0);
+    this.rows.set(event.rows ?? 10);
+    this.page.set((event.page ?? 0) + 1);
+  }
+
   ngOnInit() {
     this.loadTokens();
   }
 
   loadTokens() {
     this.store.dispatch(new SetTokensLoading(true));
-    this.tokensService.getAllTokensByStatus('OnSale').subscribe((data) => {
-      this.store.dispatch(new SetTokens(data.Response.content));
-      this.store.dispatch(new SetTokensLoading(false));
+    this.tokensService
+      .getAllTokensByStatus({
+        limit: this.rows(),
+        page: this.page(),
+        sort: 1,
+        status: 'onsale',
+      })
+      .subscribe((data) => {
+        this.store.dispatch(new SetTokens(data.Response.content));
+        this.store.dispatch(new SetTokensLoading(false));
+        this.totalRecords.set(data.Response.PaginationInfo.totalelements);
+      });
+  }
+
+  constructor() {
+    effect(() => {
+      this.store.dispatch(new SetTokensLoading(true));
+      this.tokensService
+        .getAllTokensByStatus({
+          limit: this.rows(),
+          page: this.page(),
+          sort: 1,
+          status: 'onsale',
+        })
+        .subscribe((data) => {
+          this.store.dispatch(new SetTokens(data.Response.content));
+          this.store.dispatch(new SetTokensLoading(false));
+          this.totalRecords.set(data.Response.PaginationInfo.totalelements);
+        });
     });
   }
 
@@ -45,6 +87,6 @@ export class ViewTokensPageComponent implements OnInit {
   }
 
   onViewMarketClick() {
-    console.log('View market button clicked');
+    return () => this.router.navigate(['/marketplace']);
   }
 }
