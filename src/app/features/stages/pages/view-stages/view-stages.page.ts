@@ -2,6 +2,7 @@ import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
 
 import { StageCardComponent } from '@features/stages/components/stage-card/stage-card.component';
@@ -29,6 +30,7 @@ import { StagesState } from '../../stores/stages-store/stages.state';
     AddStageDialogComponent,
     UpdateStageDialogComponent,
     ConfirmDialogModule,
+    SkeletonModule,
     ToastModule,
   ],
 })
@@ -45,6 +47,8 @@ export class ViewStagesPageComponent implements OnInit {
 
   stages = this.store.selectSignal(StagesState.getStages);
   loading = this.store.selectSignal(StagesState.getStagesLoading);
+
+  skeletons = [1, 2, 3, 4, 5, 6]
 
   ngOnInit(): void {
     this.loadStages();

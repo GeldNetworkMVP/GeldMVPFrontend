@@ -6,12 +6,14 @@
   }"
 >
   <div class="my-6 grid grid-cols-3 gap-8">
-    @for (md of masterData();track md._id) {
+    @if(!loading()) { @for (md of masterData();track md._id) {
     <app-master-data-card
       [props]="md"
       (containerSelectedToDelete)="confirmDelete($event)"
     ></app-master-data-card>
-    }
+    } } @else { @for (sk of skeletons;track sk) {
+    <p-skeleton height="128px" />
+    } }
   </div>
 </app-dashboard-page-wrapper>
 

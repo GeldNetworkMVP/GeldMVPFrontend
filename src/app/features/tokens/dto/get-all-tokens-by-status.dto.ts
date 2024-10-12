@@ -14,3 +14,10 @@ export interface GetAllTokensByStatusDto {
     };
   };
 }
+
+export interface GetAllTokensByStatusQueryParams {
+  limit: number;
+  page: number;
+  sort: number;
+  status: string
+}

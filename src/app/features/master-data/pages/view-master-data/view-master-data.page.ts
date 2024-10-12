@@ -4,7 +4,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FocusTrapModule } from 'primeng/focustrap';
-import {ToastModule} from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ToastModule } from 'primeng/toast';
 import { first } from 'rxjs';
 
 import { AddMasterDataContainerDialogComponent } from '@features/master-data/components/add-master-data-container-dialog/add-master-data-container-dialog.component';
@@ -32,6 +33,7 @@ import { MasterDataState } from '../../stores/master-data-store/master-data.stat
     FocusTrapModule,
     AddMasterDataContainerDialogComponent,
     ToastModule,
+    SkeletonModule,
     ConfirmDialogModule,
   ],
 })
@@ -48,6 +50,8 @@ export class ViewMasterDataPageComponent implements OnInit {
   ];
   masterData = this.store.selectSignal(MasterDataState.getMasterData);
   loading = this.store.selectSignal(MasterDataState.getMasterDataLoading);
+
+  skeletons = [1, 2, 3, 4, 5, 6]
 
   ngOnInit() {
     this.loadMasterData();
