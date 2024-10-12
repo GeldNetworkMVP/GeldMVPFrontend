@@ -1,0 +1,11 @@
+<li>
+  <a
+    [routerLink]="props().link"
+    class="flex items-center gap-4 rounded-lg px-4 py-3 transition-all"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    <iconify-icon class="text-[1.75rem]" [icon]="props().icon" />
+    {{ props().title }}
+  </a>
+</li>

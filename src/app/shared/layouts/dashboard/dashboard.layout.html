@@ -1,0 +1,11 @@
+<div>
+  <app-dashboard-header />
+  <div
+    class="mx-auto flex w-full gap-4 px-3 sm:max-w-[576px] md:max-w-[720px] lg:max-w-[976px] xl:max-w-[1140px] 2xl:max-w-[1320px]"
+  >
+    <app-dashboard-sidebar />
+    <main class="w-[calc(100%-200px)]">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

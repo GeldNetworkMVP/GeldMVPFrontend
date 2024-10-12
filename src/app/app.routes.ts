@@ -1,3 +1,10 @@
-import { Routes } from '@angular/router';
+import { dashboardRoutes } from '@features/dashboard/dashboard.routes';
 
-export const routes: Routes = [];
+import { homeRoutes } from './features/home/home.routes';
+import { marketplaceRoutes } from './features/marketplace/marketplace.routes';
+
+export const appRoutes = [
+    ...homeRoutes,
+    ...marketplaceRoutes,
+    ...dashboardRoutes
+];

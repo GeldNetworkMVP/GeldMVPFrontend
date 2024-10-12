@@ -1,0 +1,16 @@
+<div
+  class="h-[128px] cursor-pointer rounded-xl border border-[rgba(0,0,0,0.2)] px-4 py-2"
+  (click)="navigateToMasterDataContainer()"
+  tabindex="0"
+  (keydown)="navigateToMasterDataContainer()"
+>
+  <div class="flex items-center justify-end">
+    <button (click)="openDeleteDialog($event)">
+      <iconify-icon icon="lucide:trash" class="text-brand-gray" />
+    </button>
+  </div>
+  <div>
+    <h3 class="text-[20px] font-[700]">{{ props().dataname }}</h3>
+    <p-tag [value]="props().noOfRecords + ' records'" severity="secondary"></p-tag>
+  </div>
+</div>

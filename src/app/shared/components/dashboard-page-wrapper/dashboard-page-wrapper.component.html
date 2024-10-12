@@ -1,0 +1,71 @@
+<ng-template #content>
+  <ng-content />
+</ng-template>
+
+<div>
+  @if(!isDashboardOverviewPage()) {
+  <p-breadcrumb class="max-w-full" [model]="breadcrumbItems()">
+    <ng-template pTemplate="item" let-item>
+      <ng-container *ngIf="item.route; else elseBlock">
+        <a [routerLink]="item.route" class="flex items-center gap-2">
+          @if(item.icon) {
+          <iconify-icon [icon]="item.icon" />
+          }
+          <span class="text-primary font-semibold">{{ item.label }}</span>
+        </a>
+      </ng-container>
+      <ng-template #elseBlock>
+        <a [href]="item.url">
+          <span>{{ item.label }}</span>
+        </a>
+      </ng-template>
+    </ng-template>
+  </p-breadcrumb>
+  } @else {
+  <div class="h-[56px]"></div>
+  }
+  <div class="flex items-center justify-between">
+    <h1 class="ml-4 text-[36px]">{{ title() }}</h1>
+    <div class="flex items-center gap-4">
+      @if (secondaryButton()) {
+      <button
+        pButton
+        (click)="secondaryButton()?.action()"
+        [severity]="secondaryButton()?.severity ?? 'secondary'"
+        [outlined]="true"
+      >
+        <span>{{ secondaryButton()?.label }}</span>
+        <iconify-icon
+          [icon]="
+            'lucide:' +
+            (secondaryButton()?.icon
+              ? secondaryButton()?.icon
+              : 'external-link')
+          "
+          class="ml-2 text-[1.25rem]"
+        ></iconify-icon>
+      </button>
+      } @if (primaryButton()) {
+      <button
+        pButton
+        (click)="primaryButton()?.action()"
+        [severity]="primaryButton()?.severity ?? 'secondary'"
+        [loading]="primaryButton()?.loading ?? false"
+        [text]="!!primaryButton()?.text"
+      >
+        <span>{{ primaryButton()?.label }}</span>
+        <iconify-icon
+          [icon]="
+            'lucide:' +
+            (primaryButton()?.icon ? primaryButton()?.icon : 'plus')
+          "
+          class="ml-2 text-[1.5rem]"
+        ></iconify-icon>
+      </button>
+      }
+    </div>
+  </div>
+  <section id="content" class="ml-4">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </section>
+</div>

@@ -1,0 +1,28 @@
+<app-dashboard-page-wrapper
+  title="Stages"
+  [primaryButton]="{
+    label: 'Add New',
+    action: showAddDialog()
+  }"
+>
+  <div class="mt-6 grid grid-cols-3 gap-8">
+    @if(!loading()) { @for (stage of stages();track stage._id) {
+    <app-stage-card
+      [props]="stage"
+      [index]="$index"
+      (stageSelectedToUpdate)="showUpdateDialog($event)()"
+      (stageSelectedToDelete)="confirmDelete($event)"
+    ></app-stage-card>
+    } } @else { @for (sk of skeletons;track sk) {
+    <p-skeleton height="265.8px" />
+    } }
+  </div>
+</app-dashboard-page-wrapper>
+<app-add-stage-dialog [visible]="visible" (addStage)="loadStages()" />
+<app-update-stage-dialog
+  [visible]="updateModalVisible"
+  (updateStage)="loadStages()"
+  [selectedStageToUpdate]="selectedStageToUpdate()"
+/>
+
+<p-confirmDialog />

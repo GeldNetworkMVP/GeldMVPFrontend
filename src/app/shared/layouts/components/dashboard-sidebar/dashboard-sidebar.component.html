@@ -1,0 +1,9 @@
+<aside class="h-[calc(100vh-140px)] w-[200px]">
+  <nav class="mt-12">
+    <ul class="flex flex-col gap-4">
+      @for (item of dashboardSidebarItems; track item.title) {
+      <app-dashboard-sidebar-item [props]="item"></app-dashboard-sidebar-item>
+      }
+    </ul>
+  </nav>
+</aside>

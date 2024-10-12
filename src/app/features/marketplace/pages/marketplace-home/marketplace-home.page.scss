@@ -1,0 +1,22 @@
+:host ::ng-deep .p-sidebar-header {
+    background-color: #161616;
+    color: #fff;
+}
+
+
+:host ::ng-deep .p-sidebar-close {
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    svg {
+        color: #fff;
+    }
+}
+
+:host ::ng-deep .p-sidebar-header  .p-icon-wrapper svg {
+    // color: #fff;
+}
+
+:host ::ng-deep .p-sidebar {
+    border: none;
+}

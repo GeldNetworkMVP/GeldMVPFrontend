@@ -1,0 +1,124 @@
+<p-dialog
+  header="Add New Stage"
+  [modal]="true"
+  [(visible)]="addDialogVisibility"
+  [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '50vw', '575px': '95vw' }"
+  (onHide)="resetForm()"
+>
+  <form
+    [formGroup]="addStageForm"
+    class="mt-2 flex grow flex-col items-start gap-4 pb-8"
+  >
+    <div class="flex w-full flex-col gap-2">
+      <label for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        pInputText
+        formControlName="name"
+        placeholder="Enter stage name"
+        variant="filled"
+      />
+      @if(addStageForm.getError('name')?.invalid &&
+      addStageForm.getError('name')?.touched) {
+      <small class="text-red-500"> Name is required </small>
+      }
+    </div>
+    <div class="flex w-full flex-col gap-2">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        type="text"
+        pInputTextarea
+        formControlName="description"
+        placeholder="Enter description"
+        variant="filled"
+      ></textarea>
+      @if(addStageForm.getError('description')?.invalid &&
+      addStageForm.getError('description')?.touched) {
+      <small class="text-red-500"> Description is required </small>
+      }
+    </div>
+
+    <p>Fields</p>
+    @for (group of addStageForm.controls.fields.controls; track
+    group.metadata?.id) {
+    <div class="flex w-full flex-col gap-2" [formGroup]="group">
+      <div class="flex items-center gap-2">
+        <input
+          [id]="group.controls.valuekey.metadata?.id"
+          type="text"
+          pInputText
+          formControlName="valuekey"
+          placeholder="Enter label"
+          variant="filled"
+          class="w-full"
+        />
+        <p-dropdown
+          formControlName="valuetyperaw"
+          [options]="typeOptions"
+          optionLabel="name"
+          optionValue="key"
+          placeholder="Value Type"
+          (onChange)="onTypeSelect(group.metadata?.id, $event)"
+        />
+        <button type="button" (click)="removeCustomField(group.metadata?.id)">
+          <iconify-icon
+            icon="lucide:circle-x"
+            class="text-[1.5rem] text-red-500"
+          ></iconify-icon>
+        </button>
+      </div>
+      @if(group.controls.valuetyperaw.getRawValue() === 'masterData') {
+      <p-dropdown
+        [options]="masterDataItemOptions()"
+        appendTo="body"
+        optionLabel="dataname"
+        optionValue="_id"
+        [filter]="true"
+        filterBy="dataname"
+        styleClass="w-full"
+        formControlName="valuetype"
+        placeholder="Select master data container for this field"
+      />
+      }
+    </div>
+    }
+    <p-button (click)="addCustomField()" severity="secondary">
+      <span>New Field</span>
+      <iconify-icon
+        icon="lucide:plus"
+        class="ml-2 text-[1.5rem]"
+      ></iconify-icon>
+    </p-button>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="flex items-center justify-end gap-4">
+      <p-button
+        type="button"
+        (onClick)="cancelAdding()"
+        severity="secondary"
+        [outlined]="true"
+      >
+        Cancel
+      </p-button>
+      <p-button
+        [disabled]="addStageForm.invalid"
+        type="submit"
+        (onClick)="onSubmit()"
+        [loading]="saving()"
+        styleClass="flex items-center gap-2"
+      >
+        {{
+          addStageForm.valid
+            ? "Add"
+            : "Please
+    fill all the fields"
+        }}
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast />

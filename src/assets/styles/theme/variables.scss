@@ -1,0 +1,15 @@
+:root {
+    --brand-dark-green: rgb(37, 67, 54);
+    --brand-dark-green-transparent: #DFECE3;
+    --brand-yellow: #FAC653;
+    --brand-light-green: #B4DFC4;
+    --brand-light-gray: #EDEDED;
+    --brand-gray: #7E7E7E;
+    --brand-bright-green: #065F46;
+
+
+    // style overrides for primeng
+    --brand-secondary-color: var(var(--brand-yellow)) !important;
+    --brand-secondary-color-text: #000 !important;  
+    --font-family: "Inter", sans-serif !important;
+}

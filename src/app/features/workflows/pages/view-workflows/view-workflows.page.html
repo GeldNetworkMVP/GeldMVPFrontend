@@ -1,0 +1,27 @@
+<app-dashboard-page-wrapper
+  title="Workflows"
+  [primaryButton]="{
+    label: 'Add New',
+    action: showDialog()
+  }"
+>
+  <div class="mt-6 grid grid-cols-3 gap-8">
+    @if(!loading()) { @for (wf of workflows();track wf._id) {
+    <app-workflow-card
+      [props]="wf"
+      (workflowSelectedToUpdate)="showUpdateDialog($event)()"
+      (workflowSelectedToDelete)="confirmDelete($event)"
+    ></app-workflow-card>
+    } } @else { @for (sk of skeletons;track sk) {
+    <p-skeleton height="256.5px" />
+    } }
+  </div>
+</app-dashboard-page-wrapper>
+<app-add-workflow-dialog [visible]="visible" (addWorkflow)="loadWorkflows()" />
+<app-update-workflow-dialog
+  [visible]="updateModalVisible"
+  (updateWorkflow)="loadWorkflows()"
+  [selectedWorkflowToUpdate]="selectedWorkflowToUpdate()"
+/>
+<p-confirmDialog />
+<p-toast />

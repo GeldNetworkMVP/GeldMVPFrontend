@@ -1,0 +1,49 @@
+<app-dashboard-page-wrapper
+  title="Update record"
+  [primaryButton]="{
+    label: 'Delete',
+    action: onDeleteButtonClick(),
+    icon: 'trash',
+    severity: 'danger',
+    text: true
+  }"
+>
+  <div class="flex h-[500px]">
+    <section class="w-3/5">
+      <form
+        [formGroup]="formGroup()"
+        class="mt-4 flex grow flex-col items-start gap-4 pb-8"
+        (ngSubmit)="onSubmit()"
+      >
+        @for (metadata of formMetadata();track metadata.id) {
+        <div class="flex w-full flex-col gap-2">
+          <label [for]="metadata.id">{{metadata.label}}</label>
+          <input
+            [id]="metadata.id"
+            type="text"
+            pInputText
+            [formControlName]="metadata.id"
+            [placeholder]="'Enter '+metadata.label"
+            variant="filled"
+          />
+          @if(formGroup().getError(metadata.id)?.invalid &&
+          formGroup().getError(metadata.id)?.touched) {
+          <small class="text-red-500"> {{metadata.label}} is required </small>
+          }
+        </div>
+        }
+        <div class="mt-4 flex w-full items-center justify-between">
+          <p-button severity="secondary" type="button" (onClick)="reset()">
+            Reset
+          </p-button>
+          <p-button [loading]="saving()" type="submit" styleClass="flex items-center gap-2">
+            {{ formGroup().valid ? ( !saving() ? 'Update': 'Please wait ') : 'Fill
+            all fields to proceed'}}
+          </p-button>
+        </div>
+      </form>
+    </section>
+  </div>
+</app-dashboard-page-wrapper>
+<p-toast />
+<p-confirmDialog />
