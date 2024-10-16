@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "npm run build && npm run serve:ssr:GeldFE",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:GeldFE": "node dist/geld-fe/server/server.mjs",
@@ -35,7 +35,6 @@
     "ngxtension": "^4.0.0",
     "primeng": "^17.18.10",
     "rxjs": "~7.8.0",
-    "stellar-sdk": "^12.3.0",
     "tslib": "^2.3.0",
     "uuid": "^10.0.0",
     "zone.js": "~0.14.10"

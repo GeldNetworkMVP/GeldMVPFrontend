@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Wallet } from '../models/wallet';
-import { Memo, MemoType, Operation, Transaction } from 'stellar-sdk';
+import { Memo, MemoType, Operation, Transaction } from '@stellar/stellar-sdk';
 import {signTransaction, getAddress} from '@stellar/freighter-api';
 
 @Injectable({

@@ -1,4 +1,4 @@
-import { Memo, MemoType, Operation, Transaction } from "stellar-sdk";
+import { Memo, MemoType, Operation, Transaction } from "@stellar/stellar-sdk";
 
 export abstract class Wallet{
     walletAddress: string | undefined;

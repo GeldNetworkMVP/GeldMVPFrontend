@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Asset, Networks, Operation, TransactionBuilder} from 'stellar-sdk';
+import { Asset, Networks, Operation, TransactionBuilder} from '@stellar/stellar-sdk';
 import { UserWallet } from '../models/userwallet';
 import { FreighterComponentService } from '../freighter-services/freighter-component.service';
 import Server from '@stellar/stellar-sdk';
