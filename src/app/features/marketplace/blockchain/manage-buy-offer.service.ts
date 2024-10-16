@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Asset, Networks, Operation, TransactionBuilder} from '@stellar/stellar-sdk';
-import { UserWallet } from '../models/userwallet';
-import { FreighterComponentService } from '../freighter-services/freighter-component.service';
-import Server from '@stellar/stellar-sdk';
+import { Asset, Horizon, Networks, Operation, TransactionBuilder} from '@stellar/stellar-sdk';
+import albedo from '@albedo-link/intent';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +29,7 @@ export class ManageBuyOfferService {
        }
        var buyAsset = new Asset(asset_code, asset_issuer);
        var sellingAsset = Asset.native();
-       
+      
        var opts = {
          fee: '100',
          timebounds: {
@@ -40,7 +38,7 @@ export class ManageBuyOfferService {
          },
          networkPassphrase: Networks.TESTNET,
        };
-       let server = new Server(this.blockchainNet);
+       let server = new Horizon.Server(this.blockchainNet)
        console.log("server starting")
        server
          .loadAccount(userPK)
@@ -83,17 +81,32 @@ export class ManageBuyOfferService {
              .setTimeout(80000)
              .build();
            console.log("sign start")
-           let walletf = new UserWallet();
-           walletf = new FreighterComponentService(walletf);
-           this.userSignedTransaction = await walletf.signTransaction(transaction)
-           const transactionToSubmit = TransactionBuilder.fromXDR(
-             this.userSignedTransaction,
-             Networks.TESTNET
-           );
-           return server.submitTransaction(transactionToSubmit);
+          //  let walletf = new UserWallet();
+          //  walletf = new FreighterComponentService(walletf);
+          //  this.userSignedTransaction = await walletf.signTransaction(transaction)
+          //  const transactionToSubmit = TransactionBuilder.fromXDR(
+          //    this.userSignedTransaction,
+          //    Networks.TESTNET
+          //  );
+          //  return server.submitTransaction(transactionToSubmit);
+          let txn = transaction.toEnvelope().toXDR().toString('base64');
+          console.log("txn ---------",txn)
+          return albedo.tx({
+            xdr: txn,
+            network: Networks.TESTNET,
+            submit: true,
+          })
+          .then(result => {
+            console.log("Albedo transaction result: ", result);
+            resolve(result);
+          })
+          .catch(error => {
+            console.error("Error from albedo.tx: ", error);
+            reject(error);
+          });
          })
          .then((transactionResult:any) => {
-           console.log("Buying of NFT was successful");
+           console.log("Buying of NFT was successful",transactionResult);
            resolve(transactionResult);
          })
          .catch((err:Error) => {
