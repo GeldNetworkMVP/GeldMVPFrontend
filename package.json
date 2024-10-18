@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "npm run build && npm run serve:ssr:GeldFE",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:GeldFE": "node dist/geld-fe/server/server.mjs",
@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@albedo-link/intent": "^0.12.0",
     "@angular/animations": "^18.2.5",
     "@angular/cdk": "^18.2.5",
     "@angular/common": "^18.2.5",
@@ -28,6 +29,7 @@
     "@ngxs/devtools-plugin": "18.1.1",
     "@ngxs/router-plugin": "^18.1.1",
     "@ngxs/store": "^18.1.1",
+    "@stellar/stellar-sdk": "^12.3.0",
     "express": "^4.18.2",
     "iconify-icon": "^2.1.0",
     "ngxtension": "^4.0.0",
