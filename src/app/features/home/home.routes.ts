@@ -3,6 +3,10 @@ import { Routes } from '@angular/router';
 export const homeRoutes: Routes = [
   {
     path: '',
+    loadComponent: () =>
+      import('../../shared/layouts/home/home.layout').then(
+        (m) => m.HomeLayoutComponent
+      ),
     children: [
       {
         path: '',

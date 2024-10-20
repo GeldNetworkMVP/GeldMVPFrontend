@@ -26,7 +26,6 @@
     "@angular/platform-server": "^18.2.5",
     "@angular/router": "^18.2.5",
     "@angular/ssr": "^18.2.5",
-    "@auth0/auth0-angular": "^2.2.3",
     "@ngxs/devtools-plugin": "18.1.1",
     "@ngxs/router-plugin": "^18.1.1",
     "@ngxs/store": "^18.1.1",
