@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { environment } from '@environments/environment';
-import { Asset, Horizon, Networks, Operation, TransactionBuilder} from '@stellar/stellar-sdk';
 import albedo from '@albedo-link/intent';
+import { Injectable } from '@angular/core';
+import { Asset, Horizon, Networks, Operation, TransactionBuilder} from '@stellar/stellar-sdk';
+
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +28,10 @@ export class ManageBuyOfferService {
        } else {
          Networks.PUBLIC
        }
-       var buyAsset = new Asset(asset_code, asset_issuer);
-       var sellingAsset = Asset.native();
+       const buyAsset = new Asset(asset_code, asset_issuer);
+       const sellingAsset = Asset.native();
       
-       var opts = {
+       const opts = {
          fee: '100',
          timebounds: {
            minTime: '0',
@@ -38,12 +39,12 @@ export class ManageBuyOfferService {
          },
          networkPassphrase: Networks.TESTNET,
        };
-       let server = new Horizon.Server(this.blockchainNet)
+       const server = new Horizon.Server(this.blockchainNet)
        console.log("server starting")
        server
          .loadAccount(userPK)
          .then(async (account:any) => {
-           var transaction = new TransactionBuilder(account, opts)
+           const transaction = new TransactionBuilder(account, opts)
            .addOperation(
             Operation.changeTrust({
               asset: buyAsset,
@@ -89,7 +90,7 @@ export class ManageBuyOfferService {
           //    Networks.TESTNET
           //  );
           //  return server.submitTransaction(transactionToSubmit);
-          let txn = transaction.toEnvelope().toXDR().toString('base64');
+          const txn = transaction.toEnvelope().toXDR().toString('base64');
           console.log("txn ---------",txn)
           return albedo.tx({
             xdr: txn,

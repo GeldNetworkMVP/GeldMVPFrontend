@@ -1,9 +1,11 @@
+import albedo from '@albedo-link/intent';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { ManageBuyOfferService } from '../../blockchain/manage-buy-offer.service';
+
 import { Token } from '@app/features/tokens/models/token.model';
-import albedo from '@albedo-link/intent';
+
+import { ManageBuyOfferService } from '../../blockchain/manage-buy-offer.service';
 
 
 @Component({
@@ -34,7 +36,7 @@ constructor(
     .then((res: any) => {
       this.albedopk = res.pubkey;
     });
-    let userPK = this.albedopk;
+    const userPK = this.albedopk;
     this.service.buyToken(
         "StellarC", //token-name
         "GASL7O3TGVS5HI7D6T667UMLFCG4S7GOPEK6YNYTXLKKKXJSIWGRNNPC",//asset-issuer

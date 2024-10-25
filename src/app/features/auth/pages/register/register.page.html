@@ -1,0 +1,107 @@
+<div class="flex h-[calc(100vh-92px)] overflow-y-auto">
+  <section class="mb-12 flex w-full flex-col gap-4 overflow-auto">
+    <header class="flex justify-end">
+      <a routerLink="/auth/login" pButton severity="secondary">Sign In</a>
+    </header>
+    <h1
+      class="mt-2 w-4/5 text-[40px] font-[700] xl:text-[44px]"
+      style="line-height: 56px"
+    >
+      Register your company at
+      <span class="text-brand-bright-green"> Geld.Network </span>
+    </h1>
+    <form
+      [formGroup]="form"
+      class="mt-4 flex w-3/5 flex-col gap-4"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="flex w-full flex-col gap-2">
+        <label for="name">Company Name</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Enter company name"
+          variant="filled"
+        />
+        @if(form.getError('name')?.invalid && form.getError('name')?.touched) {
+        <small class="text-red-500"> Company name is required </small>
+        }
+      </div>
+      <div class="flex w-full flex-col gap-2">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="text"
+          pInputText
+          formControlName="email"
+          placeholder="Enter your email address"
+          variant="filled"
+        />
+        @if(form.getError('email')?.invalid && form.getError('email')?.touched)
+        {
+        <small class="text-red-500"> Email is required </small>
+        }
+      </div>
+      <div class="flex w-full flex-col gap-2">
+        <label for="contactNo">Company Contact Number</label>
+        <input
+          id="contactNo"
+          type="tel"
+          pInputText
+          formControlName="contactNo"
+          placeholder="Enter company contact number"
+          variant="filled"
+        />
+        @if(form.getError('contactNo')?.invalid &&
+        form.getError('contact')?.touched) {
+        <small class="text-red-500"> Email is required </small>
+        }
+      </div>
+      <div class="flex w-full flex-col gap-2">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          formControlName="password"
+          placeholder="Enter your password"
+          variant="filled"
+        />
+        @if(form.getError('password')?.invalid &&
+        form.getError('password')?.touched) {
+        <small class="text-red-500"> Password is required </small>
+        }
+      </div>
+      <div class="flex w-full flex-col gap-2">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          pInputText
+          formControlName="confirmPassword"
+          placeholder="Enter the same password as above"
+          variant="filled"
+        />
+        @if(form.getError('confirmPassword')?.invalid &&
+        form.getError('confirmPassword')?.touched) {
+        <small class="text-red-500">
+          Confirm password must match password
+        </small>
+        }
+      </div>
+
+      <p-button
+        styleClass="flex items-center gap-2 mt-4"
+        type="submit"
+        [loading]="submitting()"
+        [disabled]="submitting() || form.invalid"
+      >
+        {{ form.invalid ? 'Please fill in the form' : 'Sign Up' }}
+      </p-button>
+    </form>
+  </section>
+</div>
+
+<p-toast />
