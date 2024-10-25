@@ -9,4 +9,5 @@ export const appRoutes = [
     ...authRoutes,
     ...marketplaceRoutes,
     ...dashboardRoutes,
+    
 ];

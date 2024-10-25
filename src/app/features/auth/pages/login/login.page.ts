@@ -60,25 +60,29 @@ export class LoginPageComponent {
       pw: this.form.get('password')?.value as string,
     };
 
-    this.authService.login(formDto).pipe(first()).subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Login successful',
-        });
-        this.submitting.set(false);
-      },
-      error: (error) => {
-        console.error(error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'An error occurred',
-        });
-        this.submitting.set(false);
-      }
-    });
+    this.authService
+      .login(formDto)
+      .pipe(first())
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Login successful',
+          });
+          this.submitting.set(false);
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          console.error(error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'An error occurred',
+          });
+          this.submitting.set(false);
+        },
+      });
   }
 }

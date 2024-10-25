@@ -2,10 +2,12 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { Router } from 'express';
+import { tap } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { SetProfile } from '../stores/auth-store/auth.actions';
@@ -19,7 +21,18 @@ export class AuthInterceptor implements HttpInterceptor {
   store = inject(Store);
 
   intercept(req: HttpRequest<unknown>, handle: HttpHandler) {
-    return handle.handle(this.handle(req));
+    return handle.handle(this.handle(req)).pipe(
+      tap({
+        error: (err) => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 401) {
+              this.router.navigate(['/auth/login']);
+              this.store.dispatch(new SetProfile(null));
+            }
+          }
+        },
+      })
+    );
   }
 
   handle(req: HttpRequest<unknown>) {
@@ -28,7 +41,10 @@ export class AuthInterceptor implements HttpInterceptor {
       '/userexists',
       '/usersignin',
       '/updateuser',
+      '/tokens',
     ]; // URLs to exclude from prefix and token
+
+    const includedUrls = ['/updateuserstatus']; // URLs to include token
 
     const authToken = localStorage.getItem('token');
 
@@ -37,9 +53,9 @@ export class AuthInterceptor implements HttpInterceptor {
     const pathname = urlObj.pathname;
 
     // Check if the request URL starts with "/api/" and is not excluded
-    const shouldAddPrefix = !excludedUrls.some((url) =>
-      pathname.startsWith(url)
-    );
+    const shouldAddPrefix =
+      !excludedUrls.some((url) => pathname.startsWith(url)) ||
+      includedUrls.some((url) => pathname.startsWith(url));
 
     let authReq = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${authToken}`),
