@@ -70,6 +70,7 @@ export class RegisterPageComponent {
       designation: 'Geld',
       email: this.form.get('email')?.value as string,
       encpw: this.form.get('password')?.value as string,
+      status: 'pending',
     };
 
     this.authService

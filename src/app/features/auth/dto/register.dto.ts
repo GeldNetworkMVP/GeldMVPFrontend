@@ -4,4 +4,5 @@ export interface RegisterDto {
   contact: string;
   designation: string;
   encpw: string;
+  status?: string;
 }
