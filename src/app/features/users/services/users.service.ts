@@ -22,14 +22,21 @@ export class UsersService extends BaseService {
   //     });
   //   }
 
-  getAllUsers() {
-    return this.get<GetAllUsersResponseDto>('users');
+  getAllUsers(status: 'pending' | 'accepted' | 'rejected') {
+    return this.get<GetAllUsersResponseDto>(`appuser/status/${status}`);
   }
 
   acceptUser(userId: string) {
     return this.put(`updateuserstatus`, {
       _id: userId,
       status: 'accepted',
+    });
+  }
+
+  rejectUser(userId: string) {
+    return this.put(`updateuserstatus`, {
+      _id: userId,
+      status: 'rejected',
     });
   }
 }
