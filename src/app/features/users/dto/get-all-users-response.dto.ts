@@ -1,3 +1,6 @@
 import { User } from "../models/user.model";
 
-export type GetAllUsersResponseDto = User[]
+export interface GetAllUsersResponseDto {
+    Status: number;
+    Response: User[];
+}
