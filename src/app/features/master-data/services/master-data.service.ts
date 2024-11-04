@@ -34,6 +34,7 @@ export class MasterDataService extends BaseService {
   }
 
   getMasterDataContainer(containerId: string) {
+    console.log('containerId', containerId);
     return this.get<GetMasterDataContainerByIdDto>(`masterdata/${containerId}`);
   }
 

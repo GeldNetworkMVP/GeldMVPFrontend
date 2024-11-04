@@ -101,12 +101,16 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
     this.loading.set(true);
     this.masterDataService
       .getMasterDataContainer(this.containerId() ?? '')
-      .pipe(first())
+      .pipe(first()) 
       .subscribe({
         next: (data) => {
           this.selectedMasterDataContainer.set(data.Response);
           this.loading.set(false);
         },
+        error: (error) => {
+          this.loading.set(false);
+          console.error(error);
+        }
       });
   }
 
@@ -131,11 +135,16 @@ export class ViewDataInMasterDataContainersPageComponent implements OnInit {
           .pipe(first())
           .subscribe({
             next: (data) => {
-              console.log(data.Response.content);
               this.masterRecords.set(data.Response.content);
               this.loadingData.set(false);
               this.totalRecords.set(data.Response.PaginationInfo.totalelements);
             },
+            error: (error) => {
+              this.loadingData.set(false);
+              this.masterRecords.set([]);
+              this.totalRecords.set(0);
+              console.error(error);
+            }
           });
       },
       { allowSignalWrites: true }

@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { RouterLink, RouterOutlet } from "@angular/router";
 
 @Component({
     standalone: true,
     templateUrl: './home.layout.html',
     styleUrl: './home.layout.scss',
-    imports: [RouterOutlet]
+    imports: [RouterOutlet, RouterLink]
 })
 export class HomeLayoutComponent {
 
