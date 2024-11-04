@@ -105,14 +105,15 @@ export class CreateTokenPageComponent implements OnInit, OnDestroy {
       } else {
         this.saving.set(true);
         const value = this.formGroup.value;
-
+this.tokensService.getIssuer().subscribe((res:any)=>{
+  console.log("price ",String(value.price))
         const dto: SaveTokenDto = {
           plotid: value.plot as string,
           tokenname: value.tokenName as string,
           description: value.description as string,
-          price: value.price as string,
+          price: String(value.price),
           filetype: 'html', // TODO: CHECK IF THIS IS REQUIRED,
-          bcstatus: 'onsale', // TODO: CHECK THIS LATER
+          tokenissuer: res.IssuerPK, // TODO: CHECK THIS LATER
           bchash: null, // TODO: CHECK THIS LATER
         };
 
@@ -140,6 +141,7 @@ export class CreateTokenPageComponent implements OnInit, OnDestroy {
               this.saving.set(false);
             },
           });
+        });
       }
     };
   }

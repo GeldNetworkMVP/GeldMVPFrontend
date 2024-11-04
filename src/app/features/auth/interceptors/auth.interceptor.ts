@@ -42,6 +42,7 @@ export class AuthInterceptor implements HttpInterceptor {
       '/usersignin',
       '/updateuser',
       '/tokens',
+      '/tokens/updatestatus',
     ]; // URLs to exclude from prefix and token
 
     const includedUrls = ['/updateuserstatus']; // URLs to include token

@@ -28,6 +28,8 @@ import { TokensState } from '@app/features/tokens/stores/tokens-store/tokens.sta
 import { commonModules } from '@app/shared/modules/common.modules';
 
 import { MarketplaceTokenCardComponent } from '../../components/marketplace-token-card/marketplace-token-card.component';
+import { Token } from '@app/features/tokens/models/token.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -46,6 +48,7 @@ import { MarketplaceTokenCardComponent } from '../../components/marketplace-toke
     RouterLink,
     MarketplaceTokenCardComponent,
     ...commonModules,
+    CommonModule
   ],
 })
 export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
@@ -56,6 +59,7 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
   loading = this.store.selectSignal(TokensState.getTokensLoading);
   sidebarVisible = signal(false);
 
+  selectedToken: Token | null = null;
   marketPlaceSearchForm = new FormGroup<{
     search: FormControl<string | null>;
   }>({
@@ -127,5 +131,17 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
 
   openSidebar() {
     this.sidebarVisible.set(true)
+  }
+
+  onReserveToken(token: Token) {
+    this.selectedToken = token; 
+  }
+
+  trackByTokenId(index: number, token: Token): string {
+    return token._id; 
+  }
+
+  trackBySkeleton(index: number): number {
+    return index;
   }
 }

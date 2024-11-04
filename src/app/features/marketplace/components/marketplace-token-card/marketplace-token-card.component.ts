@@ -1,12 +1,18 @@
 import albedo from '@albedo-link/intent';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 
 import { Token } from '@app/features/tokens/models/token.model';
 
 import { ManageBuyOfferService } from '../../blockchain/manage-buy-offer.service';
-
+import { MarketservicesService } from '../../service/marketservices.service';
 
 @Component({
   standalone: true,
@@ -17,37 +23,50 @@ import { ManageBuyOfferService } from '../../blockchain/manage-buy-offer.service
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MarketplaceTokenCardComponent {
-  props = input.required<Token>();
+  // props = input.required<Token>();
+  @Input() props!: Token; // Token details passed from parent
+  @Output() reserveToken = new EventEmitter<Token>(); // Event to emit on Reserve click
   isLoadingPresent: boolean | undefined;
   loading: any;
   albedopk: any;
   hash: any;
+  token: any;
 
-constructor(
-  private service:ManageBuyOfferService,
-){
-}
+  constructor(
+    private service: ManageBuyOfferService,
+    private mservice: MarketservicesService
+  ) {}
 
   async BuyToken(): Promise<void> {
+    this.reserveToken.emit(this.props);
     await albedo
-    .publicKey({
-      require_existing: true,
-    })
-    .then((res: any) => {
-      this.albedopk = res.pubkey;
-    });
+      .publicKey({
+        require_existing: true,
+      })
+      .then((res: any) => {
+        this.albedopk = res.pubkey;
+      });
     const userPK = this.albedopk;
-    this.service.buyToken(
-        "StellarC", //token-name
-        "GASL7O3TGVS5HI7D6T667UMLFCG4S7GOPEK6YNYTXLKKKXJSIWGRNNPC",//asset-issuer
-        "GA2DD6SS2BXAD6SQ6M57KNDWKXEVZD2DXU62FFDYP3RVGII7O3XIATGQ",//geld-pk
-        userPK,//wallet user
-        "10"//price
+    this.service
+      .buyToken(
+        this.props.tokenname, //token-name
+        this.props.tokenissuer, //asset-issuer
+        'GA2DD6SS2BXAD6SQ6M57KNDWKXEVZD2DXU62FFDYP3RVGII7O3XIATGQ', //geld-pk
+        userPK, //wallet user
+        this.props.price //price
       )
       .then((transactionResult: any) => {
-         console.log("result: ",transactionResult)
-        if (transactionResult.successful) {
-       this.hash=transactionResult.tx_hash
+        console.log('result: ', transactionResult);
+        if (transactionResult.horizonResult.successful) {
+          console.log("here ")
+          this.hash = transactionResult.tx_hash;
+          const obj = {
+            _id: this.props._id,
+            bcstatus: 'reserved',
+            tokenhash: this.hash,
+          };
+          console.log("here 2 ",obj)
+          this.mservice.updateTokenStatus(obj);
         } else {
           if (this.isLoadingPresent) {
             this.dissmissLoading();
@@ -60,8 +79,4 @@ constructor(
     this.isLoadingPresent = false;
     this.loading.dismiss();
   }
-  
 }
-
-
-

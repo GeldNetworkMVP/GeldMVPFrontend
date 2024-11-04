@@ -91,12 +91,24 @@
           />
         </p-iconField>
       </form>
-      <section class="mb-6 mt-12 grid grid-cols-3 gap-8">
+      <!-- <section class="mb-6 mt-12 grid grid-cols-3 gap-8">
         @if(!loading()) { @for (t of tokens();track t._id) {
         <app-marketplace-token-card [props]="t"></app-marketplace-token-card>
         } } @else { @for(num of skeletons; track num) {
         <p-skeleton height="345.14px" />
         } }
+      </section> -->
+      <section class="mb-6 mt-12 grid grid-cols-3 gap-8">
+        <ng-container *ngIf="!loading(); else loadingTemplate">
+          <app-marketplace-token-card
+            *ngFor="let t of tokens(); trackBy: trackByTokenId"
+            [props]="t"
+            (reserveToken)="onReserveToken($event)" 
+          ></app-marketplace-token-card>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <p-skeleton height="345.14px" *ngFor="let num of skeletons; trackBy: trackBySkeleton"></p-skeleton>
+        </ng-template>
       </section>
       <p-paginator
         (onPageChange)="handlePagination($event)"
