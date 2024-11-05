@@ -6,6 +6,8 @@
     severity: 'primary',
     icon: 'sparkles',
     loading: saving(),
+    disabled: formGroup.invalid ,
+    disabledMessage: 'Please fill all the required fields'
 }"
 >
   <div class="flex h-[500px]">
@@ -76,7 +78,9 @@
       </form>
       <div class="mt-4 w-3/5">
         <h2>Token Preview</h2>
-        <div class="mt-2 aspect-[3/3.5] w-full rounded-md border border-gray-300 bg-gray-50 "></div>
+        <div
+          class="mt-2 aspect-[3/3.5] w-full rounded-md border border-gray-300 bg-gray-50"
+        ></div>
       </div>
     </section>
   </div>

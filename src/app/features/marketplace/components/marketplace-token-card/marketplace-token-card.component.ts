@@ -6,8 +6,10 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import {ToastModule} from 'primeng/toast'
 
 import { Token } from '@app/features/tokens/models/token.model';
 
@@ -19,7 +21,7 @@ import { MarketservicesService } from '../../service/marketservices.service';
   selector: 'app-marketplace-token-card',
   templateUrl: './marketplace-token-card.component.html',
   styleUrls: ['./marketplace-token-card.component.scss'],
-  imports: [TagModule, ButtonModule],
+  imports: [TagModule, ButtonModule, ToastModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MarketplaceTokenCardComponent {
@@ -34,7 +36,8 @@ export class MarketplaceTokenCardComponent {
 
   constructor(
     private service: ManageBuyOfferService,
-    private mservice: MarketservicesService
+    private mservice: MarketservicesService,
+    private messageService : MessageService
   ) {}
 
   async BuyToken(): Promise<void> {
@@ -58,15 +61,31 @@ export class MarketplaceTokenCardComponent {
       .then((transactionResult: any) => {
         console.log('result: ', transactionResult);
         if (transactionResult.horizonResult.successful) {
-          console.log("here ")
+          console.log('here ');
           this.hash = transactionResult.tx_hash;
           const obj = {
             _id: this.props._id,
             bcstatus: 'reserved',
             tokenhash: this.hash,
           };
-          console.log("here 2 ",obj)
-          this.mservice.updateTokenStatus(obj);
+          console.log('here 2 ', obj);
+          this.mservice.updateTokenStatus(obj).subscribe({
+            next: () => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Token reserved successfully',
+              });
+            },
+            error: (error) => {
+              console.error(error);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Token reservation failed',
+              });
+            },
+          });
         } else {
           if (this.isLoadingPresent) {
             this.dissmissLoading();

@@ -32,6 +32,8 @@ export class DashboardPageWrapperComponent implements OnInit {
     severity?: "success" | "info" | "warning" | "danger" | "help" | "primary" | "secondary" | "contrast" | null | undefined,
     loading?: boolean;
     text?: boolean
+    disabled?: boolean
+    disabledMessage?: string
   }>()
 
   secondaryButton = input<{

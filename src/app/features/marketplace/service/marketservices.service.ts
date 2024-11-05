@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+
 import { BaseService } from '@app/core/base-service.core';
+
 import { TokenStatus } from '../dto/market.dto';
 
 @Injectable({
