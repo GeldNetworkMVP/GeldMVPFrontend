@@ -40,4 +40,8 @@ export class TokensService extends BaseService {
   saveToken(dto: SaveTokenDto) {
     return this.post('token/save', dto);
   }
+
+  getIssuer(){
+    return this.get('/createIssuer')
+  }
 }

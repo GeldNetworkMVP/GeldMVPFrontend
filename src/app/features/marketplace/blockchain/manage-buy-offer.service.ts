@@ -91,7 +91,6 @@ export class ManageBuyOfferService {
           //  );
           //  return server.submitTransaction(transactionToSubmit);
           const txn = transaction.toEnvelope().toXDR().toString('base64');
-          console.log("txn ---------",txn)
           return albedo.tx({
             xdr: txn,
             network: Networks.TESTNET,
@@ -107,7 +106,6 @@ export class ManageBuyOfferService {
           });
          })
          .then((transactionResult:any) => {
-           console.log("Buying of NFT was successful",transactionResult);
            resolve(transactionResult);
          })
          .catch((err:Error) => {

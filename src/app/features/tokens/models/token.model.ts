@@ -8,4 +8,5 @@ export interface Token {
   status: string;
   bcstatus: string;
   tokenhash: string;
+  tokenissuer: string;
 }

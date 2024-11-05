@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -19,6 +20,7 @@ import {SidebarModule} from 'primeng/sidebar'
 import { SkeletonModule } from 'primeng/skeleton';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
+import { Token } from '@app/features/tokens/models/token.model';
 import { TokensService } from '@app/features/tokens/services/tokens.service';
 import {
   SetTokens,
@@ -46,6 +48,7 @@ import { MarketplaceTokenCardComponent } from '../../components/marketplace-toke
     RouterLink,
     MarketplaceTokenCardComponent,
     ...commonModules,
+    CommonModule
   ],
 })
 export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
@@ -56,6 +59,7 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
   loading = this.store.selectSignal(TokensState.getTokensLoading);
   sidebarVisible = signal(false);
 
+  selectedToken: Token | null = null;
   marketPlaceSearchForm = new FormGroup<{
     search: FormControl<string | null>;
   }>({
@@ -66,14 +70,14 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
 
   first = signal<number>(0);
   totalRecords = signal(0);
-  rows = signal(10);
+  rows = signal(6);
   page = signal(0);
 
   skeletons = [1, 2, 3, 4, 5, 6]
 
   handlePagination(event: PaginatorState) {
     this.first.set(event.first ?? 0);
-    this.rows.set(event.rows ?? 10);
+    this.rows.set(event.rows ?? 6);
     this.page.set((event.page ?? 0) + 1);
   }
 
@@ -99,7 +103,7 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
         limit: this.rows(),
         page: this.page(),
         sort: 1,
-        status: 'onsale',
+        status: 'OnSale',
       })
       .subscribe((data) => {
         this.store.dispatch(new SetTokens(data.Response.content));
@@ -115,7 +119,7 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
           limit: this.rows(),
           page: this.page(),
           sort: 1,
-          status: 'onsale',
+          status: 'OnSale',
         })
         .subscribe((data) => {
           this.store.dispatch(new SetTokens(data.Response.content));
@@ -127,5 +131,17 @@ export class MarketplaceHomePageComponent implements OnInit, OnDestroy {
 
   openSidebar() {
     this.sidebarVisible.set(true)
+  }
+
+  onReserveToken(token: Token) {
+    this.selectedToken = token; 
+  }
+
+  trackByTokenId(index: number, token: Token): string {
+    return token._id; 
+  }
+
+  trackBySkeleton(index: number): number {
+    return index;
   }
 }

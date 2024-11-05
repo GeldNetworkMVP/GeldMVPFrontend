@@ -36,12 +36,14 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handle(req: HttpRequest<unknown>) {
+    console.log('intercepted request ... ', req);
     const excludedUrls = [
       '/appuser/save',
       '/userexists',
       '/usersignin',
       '/updateuser',
       '/tokens',
+      '/tokens/updatestatus',
     ]; // URLs to exclude from prefix and token
 
     const includedUrls = ['/updateuserstatus']; // URLs to include token
