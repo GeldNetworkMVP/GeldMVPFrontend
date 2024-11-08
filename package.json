@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve",
+    "start": "npm run build && npm run serve:ssr:GeldFE",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "serve:ssr:GeldFE": "node dist/geld-fe/server/server.mjs",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix"
   },
