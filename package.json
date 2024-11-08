@@ -2,14 +2,15 @@
   "name": "geld-fe",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "dev": "ng serve",
-    "build": "ng build --configuration production",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint",
-    "lint:fix": "ng lint --fix"
-  },
+  "ng": "ng",
+  "start": "npm run build && npm run serve:ssr:GeldFE",
+  "build": "ng build && ng run geld-fe:server:production",
+  "watch": "ng build --watch --configuration development",
+  "test": "ng test",
+  "serve:ssr:GeldFE": "node dist/geld-fe/server/main.js",
+  "lint": "ng lint",
+  "lint:fix": "ng lint --fix"
+},
   "private": true,
   "dependencies": {
     "@albedo-link/intent": "^0.12.0",
