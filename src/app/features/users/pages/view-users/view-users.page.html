@@ -64,7 +64,8 @@
         <td pFrozenColumn>{{ rowData[col.field] }}</td>
         } @else { @if($index === columns().length - 1) {
         <td pFrozenColumn alignFrozen="right" [frozen]="true">
-          @if(rowData['status'] !== 'accepted') {
+          @if(rowData['status'] !== 'accepted' && rowData['status'] !==
+          'rejected') {
           <div class="flex items-center">
             <p-button
               severity="success"
@@ -83,6 +84,44 @@
               <iconify-icon icon="lucide:x" />
             </p-button>
           </div>
+          } @else if(rowData['status'] === 'rejected') {
+          <div class="flex items-center">
+            <p-button
+              severity="success"
+              text
+              styleClass="flex items-center gap-2"
+              (onClick)="tryToVerifyUser(rowData)()"
+            >
+              <iconify-icon icon="lucide:user-pen" />
+            </p-button>
+            <p-button
+              severity="danger"
+              text
+              styleClass="flex items-center gap-2"
+              (onClick)="tryToDeleteUser(rowData)()"
+            >
+              <iconify-icon icon="lucide:trash" />
+            </p-button>
+          </div>
+          } @else if(rowData['status'] === 'accepted') {
+          <div class="flex items-center">
+            <p-button
+              severity="danger"
+              text
+              styleClass="flex items-center gap-2"
+              (onClick)="tryToRejectUser(rowData)()"
+            >
+              <iconify-icon icon="lucide:x" />
+            </p-button>
+            <p-button
+              severity="danger"
+              text
+              styleClass="flex items-center gap-2"
+              (onClick)="tryToDeleteUser(rowData)()"
+            >
+              <iconify-icon icon="lucide:trash" />
+            </p-button>
+          </div>
           }
         </td>
         } @else {
@@ -98,3 +137,4 @@
   </p-table>
 </app-dashboard-page-wrapper>
 <p-confirmDialog />
+<p-toast />

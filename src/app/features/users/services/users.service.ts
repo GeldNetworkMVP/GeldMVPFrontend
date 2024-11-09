@@ -39,4 +39,8 @@ export class UsersService extends BaseService {
       status: 'rejected',
     });
   }
+
+  deleteUser(userId: string) {
+    return this.delete(`appuser/remove/${userId}`);
+  }
 }

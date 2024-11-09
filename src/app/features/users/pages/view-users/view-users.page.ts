@@ -207,4 +207,42 @@ export class ViewUsersPageComponent implements OnInit {
       });
     };
   }
+
+  tryToDeleteUser(rowData: unknown) {
+    return () => {
+      console.log(rowData);
+      this.confirmationService.confirm({
+        header: 'Delete user',
+        icon: 'pi pi-info-circle',
+        acceptButtonStyleClass: 'p-button-danger p-button-text',
+        rejectButtonStyleClass: 'p-button-text p-button-text',
+        acceptIcon: 'none',
+        rejectIcon: 'none',
+        message: 'Are you sure that you want to delete this user?',
+        accept: () => {
+          this.usersService
+            .deleteUser((rowData as User)._id)
+            .pipe(first())
+            .subscribe({
+              next: () => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'User deleted',
+                  detail: 'User deleted successfully',
+                });
+                this.loadRecords();
+              },
+              error: (err) => {
+                console.error(err);
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'An error occurred while deleting the user',
+                });
+              },
+            });
+        },
+      });
+    };
+  }
 }
