@@ -1,0 +1,31 @@
+<div class="h-screen w-screen overflow-hidden">
+    <main class="flex h-[calc(100vh-92px)]">
+      <section
+        class="relative h-[calc(100vh-92px)] w-[45%]"
+        [style]="{
+              backgroundImage: 'url(assets/images/home-bg.jpeg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+          }"
+      >
+        <a class="absolute left-6 top-3 text-[30px]" routerLink="/">
+          <span class="font-[700]">Geld</span>
+          <span>.Network</span>
+        </a>
+      </section>
+      <section class="h-[calc(100vh-92px)] w-[55%] px-6 py-8">
+        <router-outlet />
+      </section>
+    </main>
+    <footer class="flex h-[92px] items-center justify-between bg-black px-8 text-white">
+      <p>Copyright © 2024, Geld.Network. All Rights Reserved.</p>
+      <nav>
+          <ul class="flex items-center gap-8">
+              <li><a>Accessibility</a></li>
+              <li> <a>Privacy Policy</a> </li>
+              <li> <a>Do Not Sell My Personal Information</a></li>
+          </ul>
+      </nav>
+    </footer>
+  </div>
+  

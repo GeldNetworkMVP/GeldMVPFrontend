@@ -36,6 +36,10 @@ export class DashboardSidebarComponent {
       title: 'Tokens',
       link: '/dashboard/tokens',
     },
+    {
+      title: 'Users',
+      link: '/dashboard/users',
+    }
   ].map((item) => ({
     ...item,
     icon: ICONS_FOR_DASHBOARD_PAGES_MAP[item.link],

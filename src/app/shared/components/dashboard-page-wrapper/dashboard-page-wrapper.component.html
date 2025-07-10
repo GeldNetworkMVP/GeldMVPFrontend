@@ -52,12 +52,16 @@
         [severity]="primaryButton()?.severity ?? 'secondary'"
         [loading]="primaryButton()?.loading ?? false"
         [text]="!!primaryButton()?.text"
+        [disabled]="primaryButton()?.disabled"
       >
-        <span>{{ primaryButton()?.label }}</span>
+        <span>{{
+          primaryButton()?.disabled
+            ? primaryButton()?.disabledMessage
+            : primaryButton()?.label
+        }}</span>
         <iconify-icon
           [icon]="
-            'lucide:' +
-            (primaryButton()?.icon ? primaryButton()?.icon : 'plus')
+            'lucide:' + (primaryButton()?.icon ? primaryButton()?.icon : 'plus')
           "
           class="ml-2 text-[1.5rem]"
         ></iconify-icon>

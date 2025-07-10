@@ -21,11 +21,9 @@ export class BaseService {
     data: HttpPostParams[1],
     options?: HttpPostParams[2]
   ) {
-    return this.http.post<Dto>(
-      `${environment.apiUrl}/${urlPart}`,
-      data,
-      options
-    );
+    const url = `${environment.apiUrl}/${urlPart}`;
+    console.log(url);
+    return this.http.post<Dto>(url, data, options);
   }
 
   put<Dto = unknown>(

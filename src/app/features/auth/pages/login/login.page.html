@@ -1,0 +1,104 @@
+<div class="flex h-[500px]">
+  <section class="flex w-full flex-col gap-4">
+    <header class="flex justify-end">
+      <a routerLink="/auth/register" pButton severity="secondary">Register</a>
+    </header>
+    <h1
+      class="mt-2 w-4/5 text-[40px] font-[700] xl:text-[44px]"
+      style="line-height: 56px"
+    >
+      Log in to your
+      <span class="text-brand-bright-green"> Geld.Network </span> account
+    </h1>
+    <form [formGroup]="form" class="mt-4 flex w-3/5 flex-col gap-4" (ngSubmit)="onSubmit()">
+      <!-- <div class="flex w-full flex-col gap-2">
+        <label for="plot">Select plot</label>
+        <p-dropdown
+          [options]="plots()"
+          appendTo="body"
+          optionLabel="collectionname"
+          optionValue="_id"
+          [filter]="true"
+          filterBy="collectionname"
+          styleClass="w-full"
+          formControlName="plot"
+          placeholder="Select the plot"
+          id="plot"
+          name="plot"
+          (onChange)="onSelectPlot($event)"
+        />
+      </div> -->
+      <div class="flex w-full flex-col gap-2">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="text"
+          pInputText
+          formControlName="email"
+          placeholder="Enter your email address"
+          variant="filled"
+        />
+        @if(form.getError('email')?.invalid && form.getError('email')?.touched)
+        {
+        <small class="text-red-500"> Email is required </small>
+        }
+      </div>
+      <div class="flex w-full flex-col gap-2">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          formControlName="password"
+          placeholder="Enter your password"
+          variant="filled"
+        />
+        @if(form.getError('password')?.invalid &&
+        form.getError('password')?.touched) {
+        <small class="text-red-500"> Password is required </small>
+        }
+      </div>
+      <!-- <div class="flex w-full flex-col gap-2">
+        <label for="price">Plot Valued Price</label>
+        <input
+          id="price"
+          type="number"
+          pInputText
+          formControlName="price"
+          placeholder="Enter price"
+          variant="filled"
+        />
+        @if(formGroup.getError('price')?.invalid &&
+        formGroup.getError('price')?.touched) {
+        <small class="text-red-500"> Price is required </small>
+        }
+      </div>
+      <div class="flex w-full flex-col gap-2">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          type="text"
+          pInputTextarea
+          formControlName="description"
+          placeholder="Enter description"
+          variant="filled"
+        ></textarea>
+        @if(formGroup.getError('description')?.invalid &&
+        formGroup.getError('description')?.touched) {
+        <small class="text-red-500"> Description is required </small>
+        }
+      </div> -->
+
+      <p-button
+        styleClass="flex items-center gap-2 mt-4"
+        type="submit"
+        [loading]="submitting()"
+        [disabled]="submitting() || form.invalid"
+      >
+      {{ form.invalid ? 'Please fill in the form' : 'Sign In' }}
+      </p-button>
+    </form>
+  </section>
+</div>
+
+<p-toast />
