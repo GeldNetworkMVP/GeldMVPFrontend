@@ -55,7 +55,7 @@ export class ViewTokensPageComponent implements OnInit {
         limit: this.rows(),
         page: this.page(),
         sort: 1,
-        status: 'OnSale',
+        status: 'onsale',
       })
       .subscribe((data) => {
         this.store.dispatch(new SetTokens(data.Response.content));
@@ -72,7 +72,7 @@ export class ViewTokensPageComponent implements OnInit {
           limit: this.rows(),
           page: this.page(),
           sort: 1,
-          status: 'OnSale',
+          status: 'onsale',
         })
         .subscribe((data) => {
           this.store.dispatch(new SetTokens(data.Response.content));
