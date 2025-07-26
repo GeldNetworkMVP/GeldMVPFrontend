@@ -15,13 +15,16 @@ import { Token } from '@app/features/tokens/models/token.model';
 
 import { ManageBuyOfferService } from '../../blockchain/manage-buy-offer.service';
 import { MarketservicesService } from '../../service/marketservices.service';
+import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   standalone: true,
   selector: 'app-marketplace-token-card',
   templateUrl: './marketplace-token-card.component.html',
   styleUrls: ['./marketplace-token-card.component.scss'],
-  imports: [TagModule, ButtonModule, ToastModule],
+  imports: [TagModule, ButtonModule, ToastModule, CommonModule, DialogModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MarketplaceTokenCardComponent {
@@ -33,12 +36,33 @@ export class MarketplaceTokenCardComponent {
   albedopk: any;
   hash: any;
   token: any;
+     displayDialog = false;
+    fileUrl: SafeResourceUrl | null = null;;
 
   constructor(
     private service: ManageBuyOfferService,
     private mservice: MarketservicesService,
-    private messageService : MessageService
+    private messageService : MessageService,
+    private sanitizer: DomSanitizer
   ) {}
+
+
+ 
+  
+    showDialog() {
+      const cid = this.props?.cid;
+       console.log('CID:', cid);
+      if (!cid) {
+        console.error('CID is undefined or null');
+        return;
+      }
+  
+      this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://geld-network-secure.myfilebase.com/ipfs/${cid}`
+      );
+  
+      this.displayDialog = true;
+    }
 
   async BuyToken(): Promise<void> {
     this.reserveToken.emit(this.props);

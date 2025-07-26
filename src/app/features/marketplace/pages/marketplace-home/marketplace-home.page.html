@@ -38,9 +38,8 @@
         Welcome to Geld Market
       </h1>
       <p class="mx-auto w-2/3 text-center text-[18px]">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean quis
-        malesuada nunc. Aenean iaculis at lorem ut pulvinar. Morbi et malesuada
-        tellus. Aenean mollis ullamcorper orci eget fringilla.
+        <i>Own a Piece of the Future — Buy, Reserve, & Trade Land Tokens Securely on the Blockchain</i><br>
+        Discover a revolutionary marketplace where land meets blockchain. Seamlessly invest in tokenized land assets backed by secure, transparent, and decentralized technology. View detailed token info, access land documents instantly, and take part in a new era of digital land ownership with trusted cryptocurrency payments.
       </p>
     </div>
   </header>
@@ -51,13 +50,19 @@
       <div class="flex items-center justify-between">
         <h1 class="text-[36px]">Geld Tokens On Sale</h1>
         <div class="flex items-center gap-4">
-          <button pButton severity="secondary">
-            <span>Albedo Connected</span>
-            <iconify-icon
-              icon="lucide:link-2"
-              class="ml-2 text-[1.5rem]"
-            ></iconify-icon>
-          </button>
+         <button
+  pButton
+  [severity]="walletProvider === 'albedo' && walletConnected ? 'success' : 'secondary'"
+  class="flex items-center"
+>
+  <span>
+    {{ walletProvider === 'albedo' && walletConnected ? 'Albedo Connected' : 'Connect Albedo' }}
+    <span *ngIf="walletConnected && walletProvider === 'albedo'" class="ml-2">
+    </span>
+  </span>
+  <iconify-icon icon="lucide:link-2" class="ml-2 text-[1.5rem]"></iconify-icon>
+</button>
+
         </div>
       </div>
       <form class="mt-8" [formGroup]="marketPlaceSearchForm">
@@ -140,14 +145,28 @@
   </ng-template>
   <ng-template pTemplate="content">
     <div class="pt-3">
-      <ul class="flex flex-col gap-2">
-        <li
-          class="flex cursor-pointer items-center justify-between rounded-lg p-2 transition-all hover:bg-[rgba(0,0,0,0.05)]"
-        >
-          <img src="assets/images/freighter-logo.svg" alt="Freighter" />
-          <span class="mr-2 text-right">Albedo</span>
-        </li>
-      </ul>
+     <ul class="flex flex-col gap-2">
+  <li
+    class="flex flex-col cursor-pointer rounded-lg p-2 transition-all hover:bg-[rgba(0,0,0,0.05)]"
+    (click)="connectAlbedo()"
+  >
+    <div class="flex items-center justify-between">
+      <img src="assets/images/freighter-logo.svg" alt="Freighter" />
+      <span class="mr-2 text-right">Albedo</span>
+      <span
+        *ngIf="walletConnected && walletProvider === 'albedo'"
+        class="ml-2 text-green-600 font-semibold"
+      >{{walletBalance | number:'1.2-6'}} XLM</span>
+    </div>
+    <div
+      *ngIf="walletConnected && walletProvider === 'albedo'"
+      class="text-xs mt-1 text-gray-400 break-all"
+    >
+      {{ walletPublicKey }}
+    </div>
+  </li>
+</ul>
+
     </div>
   </ng-template>
 </p-sidebar>

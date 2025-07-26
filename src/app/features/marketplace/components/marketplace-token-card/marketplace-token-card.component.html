@@ -8,14 +8,29 @@
       {{ props.price }} XLM
     </p>
     <div class="mt-4 flex items-center justify-stretch gap-4">
-      <p-button styleClass="flex w-full justify-center items-center gap-2" severity="secondary" >
-        View <iconify-icon  icon="lucide:external-link" class="text-xl" />
-      </p-button>
-      <p-button styleClass="w-full" (click)="BuyToken()">
+       <button pButton type="button" label="View" icon="pi pi-external-link" (click)="showDialog()" class="mt-4 w-full flex justify-center items-center gap-2 p-button-secondary"></button>
+        <p-button styleClass="w-full" (click)="BuyToken()">
         Reserve
       </p-button>
-    </div>
   </div>
 </div>
 
-<p-toast></p-toast>
+<p-dialog
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [dismissableMask]="true"
+  header= "{{props.tokenname}}"
+  [style]="{ width: '80vw', maxWidth: '900px' }"
+  [contentStyle]="{ height: '70vh', padding: '0' }"
+  position="center"
+  (onHide)="fileUrl = null"
+>
+  <iframe
+ *ngIf="fileUrl"
+    [src]="fileUrl" 
+    width="100%" 
+    height="100%" 
+    style="border: none; min-height: 60vh;"
+  >
+  </iframe>
+</p-dialog>
