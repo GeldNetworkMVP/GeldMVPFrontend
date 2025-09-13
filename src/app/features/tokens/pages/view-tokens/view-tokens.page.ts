@@ -33,14 +33,14 @@ export class ViewTokensPageComponent implements OnInit {
 
   first = signal<number>(0);
   totalRecords = signal(0);
-  rows = signal(10);
+  rows = signal(6);
   page = signal(0);
 
   skeletons = [1, 2, 3, 4, 5, 6] 
 
   handlePagination(event: PaginatorState) {
     this.first.set(event.first ?? 0);
-    this.rows.set(event.rows ?? 10);
+    this.rows.set(event.rows ?? 6);
     this.page.set((event.page ?? 0) + 1);
   }
 

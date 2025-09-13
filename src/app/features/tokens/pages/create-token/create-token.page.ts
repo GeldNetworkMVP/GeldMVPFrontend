@@ -16,6 +16,8 @@ import { commonModules } from '@app/shared/modules/common.modules';
 
 import { SaveTokenDto } from '../../dto/save-token.dto';
 import { TokensService } from '../../services/tokens.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-token-page',
@@ -29,6 +31,7 @@ import { TokensService } from '../../services/tokens.service';
     ToastModule,
     InputTextareaModule,
     DropdownModule,
+    CommonModule,
     ...commonModules,
   ],
 })
@@ -45,13 +48,21 @@ export class CreateTokenPageComponent implements OnInit, OnDestroy {
 
   formGroup = new FormGroup({
     plot: new FormControl<string | null>(null, [Validators.required]),
-    tokenName: new FormControl<string | null>(null, [Validators.required]),
+    tokenName: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.pattern(/^[a-zA-Z]{1,12}$/),
+    ]),
     price: new FormControl<string | null>(null, [
       Validators.required,
       Validators.min(0),
     ]),
     description: new FormControl<string | null>(null, [Validators.required]),
   });
+  https: any;
+  cid: any;
+  public safeCidUrl!: SafeResourceUrl;
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.masterDataService
@@ -105,41 +116,48 @@ export class CreateTokenPageComponent implements OnInit, OnDestroy {
       } else {
         this.saving.set(true);
         const value = this.formGroup.value;
+        this.tokensService.getIssuer().subscribe((res: any) => {
+          console.log('price ', String(value.price));
+          const dto: SaveTokenDto = {
+            plotid: value.plot as string,
+            tokenname: value.tokenName as string,
+            description: value.description as string,
+            price: String(value.price),
+            filetype: 'html', // TODO: CHECK IF THIS IS REQUIRED,
+            tokenissuer: res.IssuerPK, // TODO: CHECK THIS LATER
+            bchash: null, // TODO: CHECK THIS LATER
+          };
 
-        const dto: SaveTokenDto = {
-          plotid: value.plot as string,
-          tokenname: value.tokenName as string,
-          description: value.description as string,
-          price: value.price as string,
-          filetype: 'html', // TODO: CHECK IF THIS IS REQUIRED,
-          bcstatus: 'onsale', // TODO: CHECK THIS LATER
-          bchash: null, // TODO: CHECK THIS LATER
-        };
-
-        this.tokensService
-          .saveToken(dto)
-          .pipe(first())
-          .subscribe({
-            next: () => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Token created successfully',
-              });
-              this.formGroup.reset();
-              this.router.navigate(['/dashboard/tokens']);
-              this.saving.set(false);
-            },
-            error: (error) => {
-              console.log(error);
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Failed to create token',
-              });
-              this.saving.set(false);
-            },
-          });
+          this.tokensService
+            .saveToken(dto)
+            .pipe(first())
+            .subscribe({
+              next: (response:any) => {
+                this.cid = response.Response.CID;
+                this.safeCidUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      'https://geld-network-secure.myfilebase.com/ipfs/' + this.cid
+    );
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: 'Token created successfully',
+                });
+              
+                // this.formGroup.reset();
+                // this.router.navigate(['/dashboard/tokens']);
+                this.saving.set(false);
+              },
+              error: (error) => {
+                console.log(error);
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'Failed to create token',
+                });
+                this.saving.set(false);
+              },
+            });
+        });
       }
     };
   }

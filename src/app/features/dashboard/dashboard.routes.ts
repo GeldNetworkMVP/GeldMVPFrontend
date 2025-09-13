@@ -5,6 +5,8 @@ import { stagesRoutes } from '@features/stages/stages.routes';
 import { tokensRoutes } from '@features/tokens/tokens.routes';
 import { workflowsRoutes } from '@features/workflows/workflows.routes';
 
+import { usersRoutes } from '../users/users.routes';
+
 export const dashboardRoutes: Routes = [
   {
     path: 'dashboard',
@@ -24,6 +26,7 @@ export const dashboardRoutes: Routes = [
       ...stagesRoutes,
       ...workflowsRoutes,
       ...tokensRoutes,
+      ...usersRoutes,
     ],
   },
 ];

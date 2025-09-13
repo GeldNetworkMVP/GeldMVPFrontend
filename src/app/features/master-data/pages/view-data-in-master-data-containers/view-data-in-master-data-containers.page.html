@@ -48,6 +48,15 @@
         } } }
       </tr>
     </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns().length">
+          <div class="flex items-center justify-center">
+            <p>There are no records in this container.</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
   </p-table>
   <p-paginator
     (onPageChange)="handlePagination($event)"

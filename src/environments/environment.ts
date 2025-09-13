@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   apiUrl: 'https://geldmvpbackend-production.up.railway.app',
+BLOCKCHAIN_NETWORK: 'https://horizon-testnet.stellar.org',
+  NETWORK_TYPE: 'test'
 };
 
 /*
